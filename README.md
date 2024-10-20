@@ -18,7 +18,14 @@
 from secrets_manager import get_secret_key
 
 secret_key = get_secret_key()
-openai.api_key = secret_key
 ```
 
 - 참고 블로그 : https://suddiyo.tistory.com/entry/Python-OpenAI-API-Secret-Key-%EA%B4%80%EB%A6%AC
+
+### input_data.py
+
+데이터를 입력받는 코드입니다. 입력받는 데이터 컬럼은 아래와 같습니다.
+(폐기물 이미지 경로, 폐기물 종류, 폐기물 개수, 폐기물 위치)
+
+- 입력 프로세스를 시각화 하게 되면 이미지 경로가 아닌 이미지를 입력받도록 코드가 변경되어야 합니다.
+- 입력받은 데이터는 database/waste_data.xlsx에 저장됩니다.
