@@ -6,6 +6,7 @@ import random
 import pandas as pd
 
 def main():
+    hi= 1
     API_KEY = get_secret_key()                      # 카카오 REST API 키 (유준형)
     DISTANCE_MATRIX_FILE = 'distance_matrix.csv'    # 거리 행렬 파일 이름
     FILE_PATH = 'docs/guessed_trash.xlsx'           # 주소 리스트: 엑셀 파일 읽기
