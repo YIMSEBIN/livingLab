@@ -8,11 +8,11 @@ import pandas as pd
 def main():
     API_KEY = get_secret_key()                      # 카카오 REST API 키 (유준형)
     DISTANCE_MATRIX_FILE = 'distance_matrix.csv'    # 거리 행렬 파일 이름
-    FILE_PATH = 'docs/guessed_trash.xlsx'           # 주소 리스트: 엑셀 파일 읽기
+    FILE_PATH = 'docs/guessed_trash.xlsx'           # 폐기물 주소 엑셀파일
 
-    locations = pd.read_excel(f"{FILE_PATH}", engine='openpyxl').to_dict("records")
-    demands = [random.randrange(1,11) for i in range(len(locations))]    # 노드 수에 맞는 무작위 demands 리스트 생성
-    vehicle = {'capacities': [500], 'count': 1}
+    locations = pd.read_excel(f"{FILE_PATH}", engine='openpyxl').to_dict("records")     # 폐기물의 위치
+    demands = [random.randrange(1,11) for i in range(len(locations))]                   # 각 폐기물의 용량 : 노드 수에 맞는 무작위 demands 리스트 생성
+    vehicle = {'capacities': [500], 'count': 1}                                         # 폐기물 수거 차량
 
     """CVRP 문제 해결"""
     # 데이터 모델 초기화
@@ -25,7 +25,6 @@ def main():
 
     # 라우팅 인덱스 매니저 생성
     manager = pywrapcp.RoutingIndexManager(len(data["distance_matrix"]), data["num_vehicles"], data["depot"])
-
     # 라우팅 모델 생성
     routing = pywrapcp.RoutingModel(manager)
 

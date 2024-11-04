@@ -4,6 +4,22 @@ import re
 from geopy.geocoders import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
 
+def addrChanger_GPStoLAT() :
+    gps_directory = "docs/GPS/"
+    output_directory = "docs/LatLon/"
+
+    # 출력 디렉토리 생성 (없을 경우)
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+
+    # 모든 xlsx 파일 처리
+    for file in os.listdir(gps_directory):
+        if file.endswith('.xlsx'):
+            print(f"Start {file}")
+            process_file(file, gps_directory, output_directory)
+            print(f"Processed {file}")
+
+
 # 주소에서 "(00m 범위)" 부분 제거하는 함수
 def delete_paren(address) :
     # 정규 표현식을 사용하여 괄호와 그 내용을 제거
@@ -52,21 +68,3 @@ def process_file(file_path, gps_directory, output_directory):
 
     # 결과를 새 엑셀 파일로 저장
     result.to_excel(f"{output_directory}{file_path}",index=False)
-    
-def main():
-    gps_directory = "docs/GPS/"
-    output_directory = "docs/LatLon/"
-    
-    # 출력 디렉토리 생성 (없을 경우)
-    if not os.path.exists(output_directory):
-        os.makedirs(output_directory)
-
-    # 모든 xlsx 파일 처리
-    for file in os.listdir(gps_directory):
-        if file.endswith('.xlsx'):
-            print(f"Start {file}")
-            process_file(file, gps_directory, output_directory)
-            print(f"Processed {file}")
-    
-if __name__ == '__main__':
-    main()
