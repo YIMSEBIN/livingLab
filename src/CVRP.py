@@ -88,7 +88,7 @@ def create_data_model(DISTANCE_MATRIX_FILE, locations, API_KEY, demands, vehicle
                 print(f"거리 행렬을 '{DISTANCE_MATRIX_FILE}' 파일로 저장했습니다.")
     else:
         print("거리 행렬을 생성합니다...")
-        data["distance_matrix"] = create_distance_matrix(locations)
+        data["distance_matrix"] = create_distance_matrix(API_KEY, locations)
         if data["distance_matrix"] is None:
             print("거리 행렬 생성에 실패했습니다.")
             exit(1)

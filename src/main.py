@@ -1,18 +1,36 @@
 from CVRP import create_data_model, print_solution
 from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
+from address_changer.addrChanger_GPStoLAT import addrChangerToLAT
 from secrets_manager import get_secret_key
-import random
 import pandas as pd
 
 def main():
-    API_KEY = get_secret_key()                      # 카카오 REST API 키 (유준형)
-    DISTANCE_MATRIX_FILE = 'distance_matrix.csv'    # 거리 행렬 파일 이름
-    FILE_PATH = 'docs/guessed_trash.xlsx'           # 폐기물 주소 엑셀파일
+    API_KEY = get_secret_key()                          # 카카오 REST API 키 (유준형)
+    DISTANCE_MATRIX_FILE = 'store/distance_matrix.csv'  # 거리 행렬 파일 이름
+    INPUT_DATA_PATH = 'store/inputData.csv'
+    TRASH_COST_PATH = 'docs/TrashCost.xlsx'
+    LATLOT_DATA_PATH = 'store/address.csv'
 
-    locations = pd.read_excel(f"{FILE_PATH}", engine='openpyxl').to_dict("records")     # 폐기물의 위치
-    demands = [random.randrange(1,11) for i in range(len(locations))]                   # 각 폐기물의 용량 : 노드 수에 맞는 무작위 demands 리스트 생성
+    # inputData.csv 파일 로드
+    input_data = pd.read_csv(INPUT_DATA_PATH, encoding='cp949')
+    # TrashCost.xlsx 파일 로드
+    trash_cost_data = pd.read_excel(TRASH_COST_PATH)
+
+    # 주소 정보를 LOCATIONS 리스트에 저장
+    addrChangerToLAT(INPUT_DATA_PATH, LATLOT_DATA_PATH)
+    locations = pd.read_csv(f"{LATLOT_DATA_PATH}").to_dict("records")     # 폐기물의 위치
+
+    # 쓰레기 유형에 따른 비용 정보 매핑
+    cost_map = trash_cost_data.set_index('type')['cost'].to_dict()
+
+    # 쓰레기 유형을 비용으로 변환 및 수량과 곱하여 새로운 값 계산
+    input_data['cost'] = input_data['trashType'].map(cost_map)
+    input_data['total_cost'] = input_data['cost'] * input_data['count']
+
+    demands = input_data['total_cost'].tolist()                # 각 폐기물의 용량 : 노드 수에 맞는 무작위 demands 리스트 생성
     vehicle = {'capacities': [500], 'count': 1}                                         # 폐기물 수거 차량
+
 
     """CVRP 문제 해결"""
     # 데이터 모델 초기화
