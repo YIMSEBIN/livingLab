@@ -86,6 +86,19 @@ CVRP 문제를 해결합니다.
   - demands : 각 폐기물의 용량(쓰레기 유형에 배정된 cost * 개수) 리스트.
   - vehicle : 폐기물 수거 차량(용량, 수)
 
+## 결과 형태 예시
+
+```
+Objective: 27081
+Vehicle 0의 경로:
+ 0 Load(13) ->  1 Load(15) ->  3 Load(20) ->  5 Load(22) ->  4 Load(26) ->  2 Load(29) ->  0 Load(29)                                                                        ->  0 Load(29)        
+경로 거리: 27081m
+경로 적재량: 29
+
+모든 경로의 총 거리: 27081m
+모든 경로의 총 적재량: 29
+```
+
 ## 참고사항
 
 ### API KEY 사용방법
@@ -106,17 +119,6 @@ from secrets_manager import get_secret_key
 secret_key = get_secret_key()
 ```
 
-### 결과 형태 예시
-
-```
-Objective: 27081
-Vehicle 0의 경로:
- 0 Load(13) ->  1 Load(15) ->  3 Load(20) ->  5 Load(22) ->  4 Load(26) ->  2 Load(29) ->  0 Load(29)                                                                        ->  0 Load(29)        
-경로 거리: 27081m
-경로 적재량: 29
-
-모든 경로의 총 거리: 27081m
-모든 경로의 총 적재량: 29
-```
-
-- 참고 블로그 : https://suddiyo.tistory.com/entry/Python-OpenAI-API-Secret-Key-%EA%B4%80%EB%A6%AC
+💫 reference
+https://suddiyo.tistory.com/entry/Python-OpenAI-API-Secret-Key-%EA%B4%80%EB%A6%AC
+https://developers.google.com/optimization/routing/cvrp?hl=ko
