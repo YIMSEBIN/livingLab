@@ -1,35 +1,39 @@
-from CVRP import create_data_model, print_solution
+import pandas as pd
 from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
 from address_changer.addrChanger_GPStoLAT import addrChangerToLAT
+from CVRP import create_data_model, print_solution
 from secrets_manager import get_secret_key
-import pandas as pd
+from select_oldest_waste import select_data
 
 def main():
     API_KEY = get_secret_key()                          # 카카오 REST API 키 (유준형)
     DISTANCE_MATRIX_FILE = 'store/distance_matrix.csv'  # 거리 행렬 파일 이름
-    INPUT_DATA_PATH = 'store/inputData.csv'
-    TRASH_COST_PATH = 'docs/TrashCost.xlsx'
-    LATLOT_DATA_PATH = 'store/address.csv'
+    INPUT_DATA_PATH = 'store/inputData.csv'             # input Data 파일
+    TRASH_COST_PATH = 'docs/TrashCost.xlsx'             # 쓰레기 유형에 따른 비용 파일
+    LATLOT_DATA_PATH = 'store/address.csv'              # 주소 위경도 파일
 
-    # inputData.csv 파일 로드
-    input_data = pd.read_csv(INPUT_DATA_PATH, encoding='cp949')
-    # TrashCost.xlsx 파일 로드
+    input_data = select_data(INPUT_DATA_PATH, 20)
     trash_cost_data = pd.read_excel(TRASH_COST_PATH)
 
-    # 주소 정보를 LOCATIONS 리스트에 저장
+    # Parameter1. locations : 폐기물 주소 정보(도로명주소, 위도, 경도)
     addrChangerToLAT(INPUT_DATA_PATH, LATLOT_DATA_PATH)
-    locations = pd.read_csv(f"{LATLOT_DATA_PATH}").to_dict("records")     # 폐기물의 위치
+    locations = pd.read_csv(f"{LATLOT_DATA_PATH}").to_dict("records")
 
-    # 쓰레기 유형에 따른 비용 정보 매핑
-    cost_map = trash_cost_data.set_index('type')['cost'].to_dict()
+    # Parameter2. demands : 각 폐기물의 용량
+    cost_map = trash_cost_data.set_index('type')['cost'].to_dict()    # 쓰레기 유형에 따른 비용
 
-    # 쓰레기 유형을 비용으로 변환 및 수량과 곱하여 새로운 값 계산
-    input_data['cost'] = input_data['trashType'].map(cost_map)
-    input_data['total_cost'] = input_data['cost'] * input_data['count']
+    def calculate_total_cost(row):
+        types = [typ.strip() for typ in row['trashType'].split(',')]
+        counts = list(map(int, [count.strip() for count in row['count'].split(',')]))
+        total_cost = sum(cost_map[typ] * count for typ, count in zip(types, counts))
+        return total_cost
+    
+    input_data['total_cost'] = input_data.apply(calculate_total_cost, axis=1)
+    demands = input_data['total_cost'].tolist()
 
-    demands = input_data['total_cost'].tolist()                # 각 폐기물의 용량 : 노드 수에 맞는 무작위 demands 리스트 생성
-    vehicle = {'capacities': [500], 'count': 1}                                         # 폐기물 수거 차량
+    # Parameter3. vehicle : 폐기물 수거 차량 (용량, 수)
+    vehicle = {'capacities': [500], 'count': 1} 
 
 
     """CVRP 문제 해결"""
