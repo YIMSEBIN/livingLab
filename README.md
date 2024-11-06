@@ -118,7 +118,8 @@ from secrets_manager import get_secret_key
 
 secret_key = get_secret_key()
 ```
+<br/>
 
-💫 reference
+#### 💫 reference
 https://suddiyo.tistory.com/entry/Python-OpenAI-API-Secret-Key-%EA%B4%80%EB%A6%AC
 https://developers.google.com/optimization/routing/cvrp?hl=ko
