@@ -1,4 +1,3 @@
-import openpyxl
 import pandas as pd
 import requests
 
