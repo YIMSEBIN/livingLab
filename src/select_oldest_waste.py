@@ -9,12 +9,12 @@ class Waste:
         self.location = location            # 폐기물 위치
 
 def select_data(FILE_PATH, top_N) :
-    locations_df = pd.read_csv(FILE_PATH, encoding='cp949')
+    locations_df = pd.read_csv(FILE_PATH, encoding='UTF8')
 
     # 'date' 열을 datetime 형식으로 변환
-    locations_df['date'] = pd.to_datetime(locations_df['date'])
+    locations_df['time'] = pd.to_datetime(locations_df['time'])
 
     # '쓰레기 배출 시간' 기준으로 오름차순 정렬
-    locations_df = locations_df.sort_values(by='date')
+    locations_df = locations_df.sort_values(by='time')
 
     return locations_df.head(top_N)

@@ -1,17 +1,9 @@
+from datetime import datetime, timedelta
+import random
 import pandas as pd
 import re
 from geopy.geocoders import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
-
-# def addrChanger_GPStoLAT(INPUT_DATA_PATH, OUTPUT_DATA_PATH) :
-#     process_file(INPUT_DATA_PATH, OUTPUT_DATA_PATH)
-    # 모든 xlsx 파일 처리
-    # for file in os.listdir(gps_directory):
-    #     if file.endswith('.xlsx'):
-    #         print(f"Start {file}")
-    #         process_file(INPUT_DATA_PATH, gps_directory, output_directory)
-    #         print(f"Processed {file}")
-
 
 # 주소에서 "(00m 범위)" 부분 제거하는 함수
 def delete_paren(address) :
@@ -45,9 +37,20 @@ def geocode_address(address_list):
             lat_lon.append((None, None))
     return lat_lon
 
+def putRandomData(result) :
+    result["type"] = [random.choice(["대형폐기물", "pp마대"]) for _ in range(len(result))]
+    result["count"] = [random.randint(1, 10) for _ in range(len(result))]
+    result["time"] = [
+        (datetime.now() - timedelta(days=random.randint(0, 365))).strftime("%Y-%m-%d %H:%M:%S")
+        for _ in range(len(result))
+    ]
+
+    return result
+
+
 def addrChangerToLAT(input_file_path, output_file_path):
-    # 엑셀 파일 읽기
-    data = pd.read_csv(f"{input_file_path}", encoding='cp949')
+    # csv 파일 읽기
+    data = pd.read_csv(f"{input_file_path}", encoding='UTF8')
 
     # '차량위치' 열에서 주소 읽기 (주소 형식 확인 필요)
     addresses = clean_address(data['address'])
@@ -59,5 +62,10 @@ def addrChangerToLAT(input_file_path, output_file_path):
     result['address'] = addresses
     result['Latitude'], result['Longitude'] = zip(*coordinates)
 
+    result = putRandomData(result)
+
     # 결과를 새 엑셀 파일로 저장
     result.to_csv(f"{output_file_path}",index=False)
+
+# for i in range(1, 9) :
+#     addrChangerToLAT(f'input{i}.csv',f'output{i}.csv',)
