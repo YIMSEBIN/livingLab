@@ -133,7 +133,7 @@ class WasteRouteVisualizer:
     def visualize(self, input_csv, output_html):
         """폐기물 수거 경로 시각화 생성"""
         # 데이터 로드 및 전처리
-        df = pd.read_csv(input_csv)
+        df = pd.read_csv(input_csv).iloc[:-2]
         df[['수거순서', '쓰레기확인시간', '위도', '경도']] = df[['수거순서', '쓰레기확인시간', '위도', '경도']].ffill()
         df['쓰레기확인시간'] = pd.to_datetime(df['쓰레기확인시간'])
         df['수거순서'] = df['수거순서'].astype(int)
@@ -216,10 +216,13 @@ class WasteRouteVisualizer:
         m.save(output_html)
         print(f"지도 생성 완료: {output_html}")
 
-# 실행
-input_csv_path = "src/visualize/example.csv"
-output_html_path = "waste_route_map.html"
+
 kakao_api_key = "993e67e5f9d2bc70937c00a2eb9964f5"
 
-visualizer = WasteRouteVisualizer(kakao_api_key)
-visualizer.visualize(input_csv_path, output_html_path)
+for i in range(1, 9) :
+    # 실행
+    input_csv_path = f"store/result{i}.csv"
+    output_html_path = f"store/result{i}_waste_route_map.html"
+
+    visualizer = WasteRouteVisualizer(kakao_api_key)
+    visualizer.visualize(input_csv_path, output_html_path)

@@ -2,8 +2,7 @@ from datetime import datetime, timedelta
 import random
 import pandas as pd
 import re
-from geopy.geocoders import Nominatim
-from geopy.extra.rate_limiter import RateLimiter
+import requests
 
 # 주소에서 "(00m 범위)" 부분 제거하는 함수
 def delete_paren(address) :
@@ -24,18 +23,26 @@ def clean_address(addresses):
     unique_addresses = pd.Series(unique_addresses)
     return unique_addresses
 
-# Geopy를 사용하여 주소를 위도와 경도로 변환하는 함수
+# 카카오 API를 사용하여 주소를 위도와 경도로 변환하는 함수
 def geocode_address(address_list):
-    geolocator = Nominatim(user_agent="South Korea")
-    geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
+    url = "https://dapi.kakao.com/v2/local/search/address.json"
+    headers = {"Authorization": f"KakaoAK 993e67e5f9d2bc70937c00a2eb9964f5"}
     lat_lon = []
+    
     for address in address_list:
-        location = geocode(address)
-        if location :
-            lat_lon.append((location.latitude, location.longitude))
+        params = {"query": address}
+        response = requests.get(url, headers=headers, params=params)
+        if response.status_code == 200:
+            result = response.json()
+            if result['documents']:
+                location = result['documents'][0]
+                lat_lon.append((float(location['y']), float(location['x'])))
+            else:
+                lat_lon.append((None, None))  # 주소를 찾을 수 없는 경우
         else:
-            lat_lon.append((None, None))
+            lat_lon.append((None, None))  # 요청 실패 시
     return lat_lon
+
 
 def putRandomData(result) :
     result["type"] = [random.choice(["대형폐기물", "pp마대"]) for _ in range(len(result))]
@@ -46,7 +53,6 @@ def putRandomData(result) :
     ]
 
     return result
-
 
 def addrChangerToLAT(input_file_path, output_file_path):
     # csv 파일 읽기
@@ -68,4 +74,4 @@ def addrChangerToLAT(input_file_path, output_file_path):
     result.to_csv(f"{output_file_path}",index=False)
 
 # for i in range(1, 9) :
-#     addrChangerToLAT(f'input{i}.csv',f'output{i}.csv',)
+#     addrChangerToLAT(f'store/input{i}.csv',f'store/output{i}.csv',)
