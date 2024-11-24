@@ -7,26 +7,25 @@ from secrets_manager import get_secret_key
 from select_oldest_waste import select_data
 
 def main():
-    API_KEY = get_secret_key()                          # 카카오 REST API 키 (유준형)
+    API_KEY = '993e67e5f9d2bc70937c00a2eb9964f5'                          # 카카오 REST API 키 (유준형)
     DISTANCE_MATRIX_FILE = 'store/distance_matrix.csv'  # 거리 행렬 파일 이름
-    INPUT_DATA_PATH = 'store/inputData.csv'             # input Data 파일
+    INPUT_DATA_PATH = 'store/output1.csv'             # input Data 파일
     TRASH_COST_PATH = 'docs/TrashCost.xlsx'             # 쓰레기 유형에 따른 비용 파일
-    LATLOT_DATA_PATH = 'store/address.csv'              # 주소 위경도 파일
+    LATLOT_DATA_PATH = 'store/output1.csv'              # 주소 위경도 파일
 
     input_data = select_data(INPUT_DATA_PATH, 20)
     trash_cost_data = pd.read_excel(TRASH_COST_PATH)
 
-    # Parameter1. locations : 폐기물 주소 정보(도로명주소, 위도, 경도)
-    addrChangerToLAT(INPUT_DATA_PATH, LATLOT_DATA_PATH)
+    # Parameter1. locations : 폐기물 주소 정보(도로명주소, 위도, 경도, type, count, time)
     locations = pd.read_csv(f"{LATLOT_DATA_PATH}").to_dict("records")
 
     # Parameter2. demands : 각 폐기물의 용량
     cost_map = trash_cost_data.set_index('type')['cost'].to_dict()    # 쓰레기 유형에 따른 비용
 
     def calculate_total_cost(row):
-        types = [typ.strip() for typ in row['trashType'].split(',')]
-        counts = list(map(int, [count.strip() for count in row['count'].split(',')]))
-        total_cost = sum(cost_map[typ] * count for typ, count in zip(types, counts))
+        type = row['type']
+        count = row['count']
+        total_cost = cost_map[type] * count
         return total_cost
     
     input_data['total_cost'] = input_data.apply(calculate_total_cost, axis=1)
