@@ -15,27 +15,32 @@ pip install ortools
 pip install pathlib
 pip install folium
 pip install geopy
+pip install request
 ```
 
 ## 아키텍쳐 구조
 ```
 ├── README.md
 ├── .gitignore
-├── docs
-│    ├── GPS
-│    ├── LatLon
+├── 📁 docs
+│    ├── 📁 GPS
+│    ├── 📁 LatLon
 │    ├── address.xlsx
 │    ├── CleanNetAddress.xlsx
 │    └── TrashCost.xlsx
-├── src
-│    ├── address_changer
-│    ├── visualize
+├── 📁 src
+│    ├── 📁 address_changer
+│    ├── 📁 visualize
 │    ├── CVRP.py
 │    ├── input_data.py
 │    ├── main.py
 │    ├── secrets_manager.py
 │    └── select_oldest_waste.py
-└── store
+└── 📁 store
+     ├── GPS_address0.csv
+     ├── GPS_map0.html
+     ├── distance_matrix0.csv
+     ├── input0.csv
      ├── address.csv
      ├── distance_matrix.csv
      └── inputData.csv
@@ -74,6 +79,7 @@ CVRP 문제를 해결합니다.
 
 - addrChanger_GPStoLAT.py : 도로명수조를 위경도로 변환.
 - addrChanger_LATtoGPS.py : 위경도를 도로명주소로 변환.
+- trashLocation.py : GPS에서 두 번 이상 연속으로 중복된 경우를 기준으로 쓰레기 배출 예상 위치 추출.
 
 ### main.py
 
@@ -85,6 +91,12 @@ CVRP 문제를 해결합니다.
   - API_KEY : 거리행렬 생성을 위한 카카오맵 API 키
   - demands : 각 폐기물의 용량(쓰레기 유형에 배정된 cost * 개수) 리스트.
   - vehicle : 폐기물 수거 차량(용량, 수)
+
+## 도출 순서
+### 기존 경로
+1. 데이터 파일
+store/GPS 폴더 내의 파일들은 기존 폐기물수거차량의 GPS기록입니다. src/address_changer/trashLocation.py 파일을 실행하면, 해당 데이터 중 '차량위치' 컬럼의 데이터를 추출하여 먼저 주소와 범위를 분리하고 store/GPS_address0.csv 파일로 저장합니다.
+
 
 ## 결과 형태 예시
 
