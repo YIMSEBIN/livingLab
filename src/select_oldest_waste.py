@@ -16,5 +16,7 @@ def select_data(FILE_PATH, top_N) :
 
     # '쓰레기 배출 시간' 기준으로 오름차순 정렬
     locations_df = locations_df.sort_values(by='time')
+    
+    selected_locations = pd.concat([locations_df.head(top_N+1), locations_df.iloc[[-1]]], ignore_index=True)
 
-    return locations_df.head(top_N)
+    return selected_locations

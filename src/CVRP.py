@@ -23,18 +23,21 @@ def create_distance_matrix(API_KEY, locations):
                 url = f"https://apis-navi.kakaomobility.com/v1/directions?origin={origin_coords}&destination={destination_coords}&priority=RECOMMEND"
                 response = requests.get(url, headers=headers)
                 result = response.json()
-                
                 # 응답에서 거리 값 추출
                 if response.status_code == 200:
                     try:
                         distance = result['routes'][0]['summary']['distance']  # 거리(meter)
                         distance_row.append(distance)
                     except KeyError as e:
-                        print(destination)
                         print("예외발생 : ",e)
-                        # 경로를 찾을 수 없는 경우 큰 값으로 설정
-                        distance_row.append(float('inf'))
+                        print(result)
+                        print(origin)
+                        print(destination)
+                        print('----')
+                        # 경로를 찾을 수 없는 경우 : 일반적으로 같은 주소인 경우임. 0으로 설정
+                        distance_row.append(0)
                 else:
+                    print(result)
                     print(f"API 요청 오류: {response.status_code}")
                     return None
         distance_matrix.append(distance_row)

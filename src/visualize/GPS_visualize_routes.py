@@ -10,10 +10,10 @@ class WasteRouteVisualizer:
     def __init__(self, api_key):
         self.api_key = api_key
         self.colors = {
-            'start': '#27ae60',
-            'end': '#c0392b',
-            'normal': '#2980b9',
-            'route': '#3498db',
+            'start': '#27ae60',  # 시작점 - 초록색
+            'end': '#c0392b',    # 종료점 - 빨간색
+            'normal': '#2980b9', # 중간지점 - 파란색
+            'route': '#3498db',  # 경로선 - 밝은 파란색
         }
 
     def calculate_adjusted_point(self, center, radius, next_point):
@@ -58,11 +58,38 @@ class WasteRouteVisualizer:
             print(f"경로 요청 실패: {response.status_code}, {response.text}")
             return None
 
-    def visualize(self, input_data, index):
+    def add_markers_from_csv(self, map_obj, marker_data):
+        """
+        store/result1.csv 데이터를 기반으로 마커 추가
+        """
+        for idx, (order, group) in enumerate(marker_data.groupby('수거순서')):
+            point_type = "시작 지점" if order == 1 else "종료 지점" if idx == len(marker_data['수거순서'].unique()) - 1 else "수거 지점"
+            color = (self.colors['start'] if order == 1
+                     else self.colors['end'] if point_type == "종료 지점"
+                     else self.colors['normal'])
+
+            first_row = group.iloc[0]
+
+            # 마커 추가
+            folium.Marker(
+                location=[float(first_row['위도']), float(first_row['경도'])],
+                icon=plugins.BeautifyIcon(
+                    icon='circle' if point_type in ["시작 지점", "종료 지점"] else 'arrow-down',
+                    icon_shape='circle',
+                    border_width=3,
+                    number=str(order),
+                    background_color=color,
+                    border_color=color
+                ),
+                popup=f"{point_type} #{order}",
+                tooltip=f"{point_type} #{order}"
+            ).add_to(map_obj)
+
+    def visualize(self, input_data, marker_data, index):
         """
         주소 데이터 기반 시각화
         """
-        m = folium.Map(location=[36.3504, 127.3845], zoom_start=13)  # 대전 중심 좌표
+        m = folium.Map(location=[36.3504, 127.3845], zoom_start=13, tiles='cartodbpositron')  # 대전 중심 좌표
 
         for i in range(len(input_data) - 1):
             current = input_data[i]
@@ -74,30 +101,15 @@ class WasteRouteVisualizer:
             # 조정된 둘레의 지점 계산
             adjusted_coords = self.calculate_adjusted_point(center_coords, radius, (next_point['위도'], next_point['경도']))
 
-            # 원 중심 및 조정된 지점 추가
-            folium.Circle(
-                location=center_coords,
-                radius=radius,
-                color=self.colors['normal'],
-                fill=True,
-                fill_opacity=0.4
-            ).add_to(m)
-
-            folium.Marker(
-                location=adjusted_coords,
-                tooltip=f"조정된 지점: {i + 1}",
-                icon=folium.Icon(color='blue')
-            ).add_to(m)
-
             # 경로 생성
             route_data = self.get_route(adjusted_coords, (next_point['위도'], next_point['경도']))
             if route_data and 'routes' in route_data:
                 coordinates = []
-                for section in route_data['routes'][0].get('sections', []):  # 'sections' 키 체크
-                    for road in section.get('roads', []):  # 'roads' 키 체크
+                for section in route_data['routes'][0].get('sections', []):
+                    for road in section.get('roads', []):
                         vertices = road.get('vertexes', [])
                         for j in range(0, len(vertices), 2):
-                            coordinates.append((vertices[j+1], vertices[j]))
+                            coordinates.append((vertices[j + 1], vertices[j]))
 
                 if coordinates:
                     folium.PolyLine(
@@ -108,8 +120,7 @@ class WasteRouteVisualizer:
                         tooltip=f"경로 {i + 1} → {i + 2}"
                     ).add_to(m)
             else:
-                # 기본 경로: 두 지점을 직선으로 연결
-                print(f"경로 데이터가 없어서 기본 경로를 사용합니다: {adjusted_coords} → {(next_point['위도'], next_point['경도'])}")
+                print(f"경로 데이터가 없어 기본 경로를 사용합니다: {adjusted_coords} → {(next_point['위도'], next_point['경도'])}")
                 folium.PolyLine(
                     [adjusted_coords, (next_point['위도'], next_point['경도'])],
                     color=self.colors['route'],
@@ -117,6 +128,9 @@ class WasteRouteVisualizer:
                     opacity=0.8,
                     tooltip=f"기본 경로 {i + 1} → {i + 2}"
                 ).add_to(m)
+
+        # store/result1.csv 데이터를 기반으로 마커 추가
+        self.add_markers_from_csv(m, marker_data)
 
         # 지도 저장
         m.save(f"store/GPS_map{index}.html")
@@ -135,6 +149,7 @@ def get_coordinates_from_kakao(address, api_key):
             return float(coords['y']), float(coords['x'])  # 위도, 경도
     return None, None
 
+
 def process_address_list(address_list, api_key):
     result = []
     for address in address_list:
@@ -148,30 +163,26 @@ def process_address_list(address_list, api_key):
     return result
 
 
+def load_marker_data(file_path):
+    """store/result1.csv 데이터를 로드"""
+    df = pd.read_csv(file_path).iloc[:-2]
+    df['수거순서'] = df['수거순서'].astype(int)
+    return df
+
+
 # 메인 실행
-input_file_path = [
-    '운행기록_88다1348_20240902',
-    '운행기록_88다1348_20240905',
-    '운행기록_88다1348_20240909',
-    '운행기록_88다1348_20240912',
-    '운행기록_88다1348_20240919',
-    '운행기록_88다1348_20240923',
-    '운행기록_88다1348_20240926',
-    '운행기록_88다1348_20240930'
-]
+kakao_api_key = "d0b15f0306696b205d1b2b084dc00c3d"
 
-# 카카오 API 키
-kakao_api_key = "993e67e5f9d2bc70937c00a2eb9964f5"
-
+# 첫 번째 경로 데이터 로드
 for i in range(1, 9):
     # 주소 리스트
     data = pd.read_csv(f'store/GPS_address{i}.csv')
-    
-    # '차량위치' 컬럼의 데이터 추출
     address_list = list(data['차량위치'])
-
-    # 데이터 처리
     processed_data = process_address_list(address_list, kakao_api_key)
 
+    # 마커 데이터 로드
+    marker_data = load_marker_data('store/result1.csv')
+
+    # 지도 시각화
     visualizer = WasteRouteVisualizer(kakao_api_key)
-    visualizer.visualize(processed_data, i)
+    visualizer.visualize(processed_data, marker_data, i)

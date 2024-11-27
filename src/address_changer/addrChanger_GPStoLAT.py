@@ -44,14 +44,25 @@ def geocode_address(address_list):
     return lat_lon
 
 
-def putRandomData(result) :
-    result["type"] = [random.choice(["대형폐기물", "pp마대"]) for _ in range(len(result))]
-    result["count"] = [random.randint(1, 10) for _ in range(len(result))]
-    result["time"] = [
-        (datetime.now() - timedelta(days=random.randint(0, 365))).strftime("%Y-%m-%d %H:%M:%S")
-        for _ in range(len(result))
-    ]
+def putRandomData(result):
 
+    # 0번째와 -1번째 행을 고정값으로 설정
+    result.loc[0, 'type'] = "대형폐기물"
+    result.loc[0, 'count'] = 0
+    result.loc[0, 'time'] = datetime.strptime("2000-01-01 03:38:35.642636", "%Y-%m-%d %H:%M:%S.%f")
+
+    result.loc[len(result) - 1, 'type'] = "대형폐기물"
+    result.loc[len(result) - 1, 'count'] = 0
+    result.loc[len(result) - 1, 'time'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+
+    # 1번째부터 len(result) - 2번째까지 랜덤 값 채우기
+    for i in range(1, len(result) - 1):
+        result.loc[i, 'type'] = random.choice(["대형폐기물", "pp마대"])
+        result.loc[i, 'count'] = random.randint(1, 10)
+        result.loc[i, 'time'] = (datetime.now() - timedelta(days=random.randint(0, 365))).strftime("%Y-%m-%d %H:%M:%S.%f")
+
+    result['count'] = result['count'].astype(int)
+    result['time'] = pd.to_datetime(result['time'], errors = 'coerce')
     return result
 
 def addrChangerToLAT(input_file_path, output_file_path):
@@ -60,6 +71,11 @@ def addrChangerToLAT(input_file_path, output_file_path):
 
     # '차량위치' 열에서 주소 읽기 (주소 형식 확인 필요)
     addresses = clean_address(data['address'])
+    
+    # 앞뒤에 (주)오성알씨 주소 추가
+    addresses = pd.concat([pd.Series(['대전 대덕구 상서당3길 16']), addresses], ignore_index=True)
+    addresses = pd.concat([addresses, pd.Series(['대전 대덕구 상서당3길 16'])], ignore_index=True)
+
     # 주소를 위도와 경도로 변환
     coordinates = geocode_address(addresses)
 
@@ -73,5 +89,6 @@ def addrChangerToLAT(input_file_path, output_file_path):
     # 결과를 새 엑셀 파일로 저장
     result.to_csv(f"{output_file_path}",index=False)
 
-# for i in range(1, 9) :
-#     addrChangerToLAT(f'store/input{i}.csv',f'store/output{i}.csv',)
+for i in range(1, 9) :
+    addrChangerToLAT(f'store/input{i}.csv',f'store/output{i}.csv',)
+    print(f"store/output{i}.csv 파일을 저장했습니다.")

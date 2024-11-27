@@ -207,7 +207,9 @@ class WasteRouteVisualizer:
                             tooltip=f"구간 {order} → {order + 1}"
                         ).add_to(m)
                     except Exception as e:
+                        print(route_data)
                         print(f"경로 처리 중 오류 발생: {e}")
+                        print("출발지와 도착지가 5m 이내인 경우는 경로 표시가 없어도 괜찮은 수준임.")
 
         # 범례 추가
         m.get_root().html.add_child(folium.Element(self.create_legend(colormap)))
@@ -217,7 +219,7 @@ class WasteRouteVisualizer:
         print(f"지도 생성 완료: {output_html}")
 
 
-kakao_api_key = "993e67e5f9d2bc70937c00a2eb9964f5"
+kakao_api_key = "d0b15f0306696b205d1b2b084dc00c3d"
 
 for i in range(1, 9) :
     # 실행

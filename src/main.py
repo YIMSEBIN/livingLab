@@ -1,16 +1,15 @@
 import pandas as pd
 from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
-from address_changer.addrChanger_GPStoLAT import addrChangerToLAT
 from CVRP import create_data_model, print_solution
 from secrets_manager import get_secret_key
 from select_oldest_waste import select_data
 
 def main():
-    API_KEY = '993e67e5f9d2bc70937c00a2eb9964f5'        # 카카오 REST API 키 (유준형)
+    API_KEY = 'd0b15f0306696b205d1b2b084dc00c3d'        # 카카오 REST API 키 (임세빈)
     TRASH_COST_PATH = 'docs/TrashCost.xlsx'             # 쓰레기 유형에 따른 비용 파일
 
-    for i in range(1,9) :
+    for i in range(8,9) :
         DISTANCE_MATRIX_FILE = f'store/distance_matrix{i}.csv'  # 거리 행렬 파일 이름
         INPUT_DATA_PATH = f'store/output{i}.csv'               # input Data 파일
         OUTPUT_DATA_PATH = f'store/result{i}.csv'
@@ -29,7 +28,7 @@ def main():
             count = row['count']
             total_cost = cost_map[type] * count
             return total_cost
-        
+
         input_data['total_cost'] = input_data.apply(calculate_total_cost, axis=1)
         demands = input_data['total_cost'].tolist()
 
