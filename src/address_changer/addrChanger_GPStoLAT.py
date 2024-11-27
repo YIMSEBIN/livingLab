@@ -3,6 +3,7 @@ import random
 import pandas as pd
 import re
 import requests
+from secrets_manager import get_secret_key
 
 # 주소에서 "(00m 범위)" 부분 제거하는 함수
 def delete_paren(address) :
@@ -25,8 +26,9 @@ def clean_address(addresses):
 
 # 카카오 API를 사용하여 주소를 위도와 경도로 변환하는 함수
 def geocode_address(address_list):
+    API_KEY = get_secret_key()
     url = "https://dapi.kakao.com/v2/local/search/address.json"
-    headers = {"Authorization": f"KakaoAK 993e67e5f9d2bc70937c00a2eb9964f5"}
+    headers = {"Authorization": f"KakaoAK {API_KEY}"}
     lat_lon = []
     
     for address in address_list:
@@ -66,6 +68,7 @@ def putRandomData(result):
     return result
 
 def addrChangerToLAT(input_file_path, output_file_path):
+
     # csv 파일 읽기
     data = pd.read_csv(f"{input_file_path}", encoding='UTF8')
 

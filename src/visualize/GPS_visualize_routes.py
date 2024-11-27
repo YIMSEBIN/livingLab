@@ -5,6 +5,8 @@ import math
 import requests
 import re
 
+from secrets_manager import get_secret_key
+
 
 class WasteRouteVisualizer:
     def __init__(self, api_key):
@@ -171,18 +173,18 @@ def load_marker_data(file_path):
 
 
 # 메인 실행
-kakao_api_key = "d0b15f0306696b205d1b2b084dc00c3d"
+API_KEY = get_secret_key()
 
 # 첫 번째 경로 데이터 로드
 for i in range(1, 9):
     # 주소 리스트
     data = pd.read_csv(f'store/GPS_address{i}.csv')
     address_list = list(data['차량위치'])
-    processed_data = process_address_list(address_list, kakao_api_key)
+    processed_data = process_address_list(address_list, API_KEY)
 
     # 마커 데이터 로드
     marker_data = load_marker_data('store/result1.csv')
 
     # 지도 시각화
-    visualizer = WasteRouteVisualizer(kakao_api_key)
+    visualizer = WasteRouteVisualizer(API_KEY)
     visualizer.visualize(processed_data, marker_data, i)

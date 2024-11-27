@@ -5,6 +5,8 @@ import branca
 import requests
 from datetime import datetime
 
+from secrets_manager import get_secret_key
+
 class WasteRouteVisualizer:
     def __init__(self, api_key):
         self.api_key = api_key
@@ -218,13 +220,12 @@ class WasteRouteVisualizer:
         m.save(output_html)
         print(f"지도 생성 완료: {output_html}")
 
-
-kakao_api_key = "d0b15f0306696b205d1b2b084dc00c3d"
+API_KEY = get_secret_key()
 
 for i in range(1, 9) :
     # 실행
     input_csv_path = f"store/result{i}.csv"
     output_html_path = f"store/result{i}_waste_route_map.html"
 
-    visualizer = WasteRouteVisualizer(kakao_api_key)
+    visualizer = WasteRouteVisualizer(API_KEY)
     visualizer.visualize(input_csv_path, output_html_path)

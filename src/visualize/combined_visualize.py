@@ -4,7 +4,7 @@ from folium import plugins
 import branca
 import requests
 import re
-import math
+from secrets_manager import get_secret_key
 
 
 class CombinedRouteVisualizer:
@@ -275,17 +275,15 @@ def get_coordinates_from_kakao(address, api_key):
             return float(coords['y']), float(coords['x'])
     return None, None
 
-
-
 # 메인 실행
-kakao_api_key = "d0b15f0306696b205d1b2b084dc00c3d"
+API_KEY = get_secret_key()
 
 # 첫 번째 경로 데이터 로드
-route1_data = load_gps_address_data('store/GPS_address1.csv', kakao_api_key)
+route1_data = load_gps_address_data('store/GPS_address1.csv', API_KEY)
 
 # 두 번째 경로 데이터 로드
 route2_data, marker_data = load_result_data('store/result1.csv')
 
 # 경로 시각화
-visualizer = CombinedRouteVisualizer(kakao_api_key)
+visualizer = CombinedRouteVisualizer(API_KEY)
 visualizer.visualize_combined_routes(route1_data, route2_data, 'store/combined_routes_map.html', marker_data)

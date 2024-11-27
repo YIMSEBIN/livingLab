@@ -1,6 +1,6 @@
 import os
 import json
-import requests  # HTTP 요청을 위해 requests 라이브러리 사용
+import requests
 
 def get_secret_key(filename='secrets.json', primary_key='SECRET_KEY_Junhyeong', fallback_key='SECRET_KEY_Sebin'):
     script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -15,10 +15,12 @@ def get_secret_key(filename='secrets.json', primary_key='SECRET_KEY_Junhyeong', 
 
         # 먼저 primary_secret로 요청
         if primary_secret and test_api_key(primary_secret):
+            print('현재 사용중인 API KEY : Junhyeong')
             return primary_secret
 
         # primary_secret 실패 시 fallback_secret 반환
         if fallback_secret and test_api_key(fallback_secret):
+            print('현재 사용중인 API KEY : Sebin')
             return fallback_secret
 
         print("ERROR: 모든 키가 유효하지 않음.")
@@ -36,13 +38,17 @@ def test_api_key(api_key):
     주어진 API 키를 테스트하는 함수. 
     여기서는 Kakao REST API에 대해 샘플 요청을 시뮬레이션.
     """
-    url = "https://kapi.kakao.com/v2/user/me"  # 예제 Kakao API 엔드포인트
+
+    url = "https://dapi.kakao.com/v2/local/search/address.json"
     headers = {
-        "Authorization": f"Bearer {api_key}"
+        "Authorization": f"KakaoAK {api_key}"
+    }
+    params = {
+        "query": "청와대"
     }
     
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, params=params)
         if response.status_code == 200:
             return True  # 유효한 키
         else:
