@@ -1,5 +1,20 @@
-# 데이터를 더 추가하여 20개 이상 처리하도록 수정
+from datetime import datetime, timedelta
+import random
 import pandas as pd
+
+def putRandomData(result):
+    for i in range(0, len(result)):
+        result.loc[i, 'Latitude'] = ''
+        result.loc[i, 'Longitude'] = ''
+        result.loc[i, 'type'] = random.choice(["대형폐기물", "pp마대"])
+        result.loc[i, 'count'] = random.randint(1, 10)
+        result.loc[i, 'time'] = (datetime.now() - timedelta(days=random.randint(0, 365))).strftime("%Y-%m-%d %H:%M:%S.%f")
+        result.loc[i, 'image'] = ''
+        result.loc[i, 'score'] = random.uniform(0, 1)
+
+    result['count'] = result['count'].astype(int)
+    result['time'] = pd.to_datetime(result['time'], errors = 'coerce')
+    return result
 
 input_file_path = [
 '운행기록_88다1348_20240902',
@@ -34,6 +49,10 @@ for i in range(1, 9) :
     # 방문 횟수를 기준으로 상위 20개 추출
     top_locations = location_counts.head(20)['address']
 
-    # 결과를 파일로 저장 (선택 사항)
-    top_locations.to_csv(f"store/input{i}.csv", index=False, encoding='utf-8-sig')
-    print(f"\n결과가 'input{i}.csv' 파일로 저장되었습니다.")
+    # 랜덤 데이터 추가
+    result = pd.DataFrame(top_locations, columns=['address'])
+    result = putRandomData(result)
+
+    # 결과를 파일로 저장
+    result.to_csv(f"store/image_model_output{i}.csv", index=False, encoding='utf-8-sig')
+    print(f"\n결과가 'image_model_output{i}.csv' 파일로 저장되었습니다.")

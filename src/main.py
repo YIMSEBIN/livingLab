@@ -2,7 +2,7 @@ import pandas as pd
 from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
 from CVRP import create_data_model, print_solution
-from secrets_manager import get_secret_key
+from secret_key.secrets_manager import get_secret_key
 from select_oldest_waste import select_data
 
 def main():
@@ -11,7 +11,7 @@ def main():
 
     for i in range(1,9) :
         DISTANCE_MATRIX_FILE = f'store/distance_matrix{i}.csv'  # 거리 행렬 파일 이름
-        INPUT_DATA_PATH = f'store/output{i}.csv'               # input Data 파일
+        INPUT_DATA_PATH = f'store/route_input{i}.csv'               # input Data 파일
         OUTPUT_DATA_PATH = f'store/result{i}.csv'
 
         input_data = select_data(INPUT_DATA_PATH, 20)
@@ -34,7 +34,6 @@ def main():
 
         # Parameter3. vehicle : 폐기물 수거 차량 (용량, 수)
         vehicle = {'capacities': [500], 'count': 1} 
-
 
         """CVRP 문제 해결"""
         # 데이터 모델 초기화
