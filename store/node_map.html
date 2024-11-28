@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_94d94eaa3a0c979b0dd27eb850c32cb7 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+    <script src="https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.css"/>
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_94d94eaa3a0c979b0dd27eb850c32cb7" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_94d94eaa3a0c979b0dd27eb850c32cb7 = L.map(
+                "map_94d94eaa3a0c979b0dd27eb850c32cb7",
+                {
+                    center: [36.36951577215222, 127.39148134534491],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 13,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_a0cfc15602f19eb61688df7f05084be3 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e", "detectRetina": false, "maxNativeZoom": 20, "maxZoom": 20, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abcd", "tms": false}
+            );
+        
+    
+            tile_layer_a0cfc15602f19eb61688df7f05084be3.addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var marker_fc802d79271907a8f0648728799da02d = L.marker(
+                [36.4216090560865, 127.423704564947],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_cda5bf482cf3a44954ae71df940714d8 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "0", "textColor": "#2980b9"}
+            )
+            marker_fc802d79271907a8f0648728799da02d.setIcon(beautify_icon_cda5bf482cf3a44954ae71df940714d8);
+        
+    
+        var popup_1764f22c297ef2770c5f9645715f0ae9 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_98bc974d2ff3d68166c9042725fced78 = $(`<div id="html_98bc974d2ff3d68166c9042725fced78" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #0</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2000-01-01 03:38</td>                 </tr>                 <tr><td>대형폐기물</td><td class='text-right'>0개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">0개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_1764f22c297ef2770c5f9645715f0ae9.setContent(html_98bc974d2ff3d68166c9042725fced78);
+            
+        
+
+        marker_fc802d79271907a8f0648728799da02d.bindPopup(popup_1764f22c297ef2770c5f9645715f0ae9)
+        ;
+
+        
+    
+    
+            marker_fc802d79271907a8f0648728799da02d.bindTooltip(
+                `<div>
+                     수거 지점 #0
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_2f119d9be338bcb9e71a98ff9d0acd7c = L.marker(
+                [36.4215451599694, 127.423832559993],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_c7f7ff16d0d3e130f78deff55b820fb3 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "1", "textColor": "#2980b9"}
+            )
+            marker_2f119d9be338bcb9e71a98ff9d0acd7c.setIcon(beautify_icon_c7f7ff16d0d3e130f78deff55b820fb3);
+        
+    
+        var popup_0020ae6a24810b95ba65fd4601ed8144 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_ea6c2be46bc05ded31bd19b0c9fc3bb7 = $(`<div id="html_ea6c2be46bc05ded31bd19b0c9fc3bb7" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #1</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-06-25 21:35</td>                 </tr>                 <tr><td>pp마대</td><td class='text-right'>3개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">3개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_0020ae6a24810b95ba65fd4601ed8144.setContent(html_ea6c2be46bc05ded31bd19b0c9fc3bb7);
+            
+        
+
+        marker_2f119d9be338bcb9e71a98ff9d0acd7c.bindPopup(popup_0020ae6a24810b95ba65fd4601ed8144)
+        ;
+
+        
+    
+    
+            marker_2f119d9be338bcb9e71a98ff9d0acd7c.bindTooltip(
+                `<div>
+                     수거 지점 #1
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_43cd05f00f87a0396a6eaffb4d9a4fea = L.marker(
+                [36.4209979065325, 127.423749972063],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_71100ee862f8e4f5a8e61663f240f4a1 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "2", "textColor": "#2980b9"}
+            )
+            marker_43cd05f00f87a0396a6eaffb4d9a4fea.setIcon(beautify_icon_71100ee862f8e4f5a8e61663f240f4a1);
+        
+    
+        var popup_87adcf315028de2a28c51718d307641f = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_2393e41769a09e4b2f5b30acab16bf47 = $(`<div id="html_2393e41769a09e4b2f5b30acab16bf47" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #2</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-03-11 21:35</td>                 </tr>                 <tr><td>pp마대</td><td class='text-right'>1개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">1개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_87adcf315028de2a28c51718d307641f.setContent(html_2393e41769a09e4b2f5b30acab16bf47);
+            
+        
+
+        marker_43cd05f00f87a0396a6eaffb4d9a4fea.bindPopup(popup_87adcf315028de2a28c51718d307641f)
+        ;
+
+        
+    
+    
+            marker_43cd05f00f87a0396a6eaffb4d9a4fea.bindTooltip(
+                `<div>
+                     수거 지점 #2
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_7960f295cfcb9178fff00b9279598ebd = L.marker(
+                [36.4213463075871, 127.424203570367],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_bb163ef6abfa97968ad867a52b5946d8 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "3", "textColor": "#2980b9"}
+            )
+            marker_7960f295cfcb9178fff00b9279598ebd.setIcon(beautify_icon_bb163ef6abfa97968ad867a52b5946d8);
+        
+    
+        var popup_1deeb0c6f48d7380485fc2be8eb73e03 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_cc863cb5465f25afb3b06d4635da37c3 = $(`<div id="html_cc863cb5465f25afb3b06d4635da37c3" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #3</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-03-11 21:35</td>                 </tr>                 <tr><td>pp마대</td><td class='text-right'>10개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">10개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_1deeb0c6f48d7380485fc2be8eb73e03.setContent(html_cc863cb5465f25afb3b06d4635da37c3);
+            
+        
+
+        marker_7960f295cfcb9178fff00b9279598ebd.bindPopup(popup_1deeb0c6f48d7380485fc2be8eb73e03)
+        ;
+
+        
+    
+    
+            marker_7960f295cfcb9178fff00b9279598ebd.bindTooltip(
+                `<div>
+                     수거 지점 #3
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_53ecb0ce2fa8210bdcad8b0b6e9c6df7 = L.marker(
+                [36.2942460810115, 127.336796734592],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_77b67aade7c7a8655d071d57aafa7fa9 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "4", "textColor": "#2980b9"}
+            )
+            marker_53ecb0ce2fa8210bdcad8b0b6e9c6df7.setIcon(beautify_icon_77b67aade7c7a8655d071d57aafa7fa9);
+        
+    
+        var popup_156b55caf3c932d0decbb262e2d61427 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_679d15c30df4f91a496fa692e83f28cf = $(`<div id="html_679d15c30df4f91a496fa692e83f28cf" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #4</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-01-31 21:35</td>                 </tr>                 <tr><td>pp마대</td><td class='text-right'>7개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">7개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_156b55caf3c932d0decbb262e2d61427.setContent(html_679d15c30df4f91a496fa692e83f28cf);
+            
+        
+
+        marker_53ecb0ce2fa8210bdcad8b0b6e9c6df7.bindPopup(popup_156b55caf3c932d0decbb262e2d61427)
+        ;
+
+        
+    
+    
+            marker_53ecb0ce2fa8210bdcad8b0b6e9c6df7.bindTooltip(
+                `<div>
+                     수거 지점 #4
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_ffa26a57765f25bc809f77c871e09fce = L.marker(
+                [36.3134899542661, 127.350156111926],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_c990fc952e0ca0ea3accfe45a899b244 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "5", "textColor": "#2980b9"}
+            )
+            marker_ffa26a57765f25bc809f77c871e09fce.setIcon(beautify_icon_c990fc952e0ca0ea3accfe45a899b244);
+        
+    
+        var popup_aa7ad51509430ab515413f158fad6964 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_3a46d4e7a3480e1d560b720278cbcc72 = $(`<div id="html_3a46d4e7a3480e1d560b720278cbcc72" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #5</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-02-15 21:35</td>                 </tr>                 <tr><td>대형폐기물</td><td class='text-right'>10개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">10개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_aa7ad51509430ab515413f158fad6964.setContent(html_3a46d4e7a3480e1d560b720278cbcc72);
+            
+        
+
+        marker_ffa26a57765f25bc809f77c871e09fce.bindPopup(popup_aa7ad51509430ab515413f158fad6964)
+        ;
+
+        
+    
+    
+            marker_ffa26a57765f25bc809f77c871e09fce.bindTooltip(
+                `<div>
+                     수거 지점 #5
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_08d5af1fce7ca22b56cc60a9007a68b0 = L.marker(
+                [36.4219981944684, 127.423318862653],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_c83ced2a24e446d6ae77086c0518fd34 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "6", "textColor": "#2980b9"}
+            )
+            marker_08d5af1fce7ca22b56cc60a9007a68b0.setIcon(beautify_icon_c83ced2a24e446d6ae77086c0518fd34);
+        
+    
+        var popup_d89c8098fc5d7bc4d4c659a9fb24e177 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_2987e660d57c333c11bc6b6ac9cdb736 = $(`<div id="html_2987e660d57c333c11bc6b6ac9cdb736" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #6</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-07-04 21:35</td>                 </tr>                 <tr><td>pp마대</td><td class='text-right'>4개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">4개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_d89c8098fc5d7bc4d4c659a9fb24e177.setContent(html_2987e660d57c333c11bc6b6ac9cdb736);
+            
+        
+
+        marker_08d5af1fce7ca22b56cc60a9007a68b0.bindPopup(popup_d89c8098fc5d7bc4d4c659a9fb24e177)
+        ;
+
+        
+    
+    
+            marker_08d5af1fce7ca22b56cc60a9007a68b0.bindTooltip(
+                `<div>
+                     수거 지점 #6
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_6840f197cb5193ab25f69a60a9d6b057 = L.marker(
+                [36.4172895996179, 127.423069529534],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_a9c1e2776a35eaae718c706016be4553 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "7", "textColor": "#2980b9"}
+            )
+            marker_6840f197cb5193ab25f69a60a9d6b057.setIcon(beautify_icon_a9c1e2776a35eaae718c706016be4553);
+        
+    
+        var popup_327ce7302a8b338916299fac72ba7ec8 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_616a81f91f0511a9d461cd77066b5c69 = $(`<div id="html_616a81f91f0511a9d461cd77066b5c69" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #7</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-06-06 21:35</td>                 </tr>                 <tr><td>pp마대</td><td class='text-right'>2개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">2개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_327ce7302a8b338916299fac72ba7ec8.setContent(html_616a81f91f0511a9d461cd77066b5c69);
+            
+        
+
+        marker_6840f197cb5193ab25f69a60a9d6b057.bindPopup(popup_327ce7302a8b338916299fac72ba7ec8)
+        ;
+
+        
+    
+    
+            marker_6840f197cb5193ab25f69a60a9d6b057.bindTooltip(
+                `<div>
+                     수거 지점 #7
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_d7831992c1b9552d238c974a16966084 = L.marker(
+                [36.3739918802501, 127.419001509025],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_0402484d9201042eee94b0b7412c8e1b = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "8", "textColor": "#2980b9"}
+            )
+            marker_d7831992c1b9552d238c974a16966084.setIcon(beautify_icon_0402484d9201042eee94b0b7412c8e1b);
+        
+    
+        var popup_f170576e44ae6f0521d2bb800df4c722 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_2278882992b8a4240797a7e4f0412622 = $(`<div id="html_2278882992b8a4240797a7e4f0412622" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #8</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-10-01 21:35</td>                 </tr>                 <tr><td>pp마대</td><td class='text-right'>1개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">1개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_f170576e44ae6f0521d2bb800df4c722.setContent(html_2278882992b8a4240797a7e4f0412622);
+            
+        
+
+        marker_d7831992c1b9552d238c974a16966084.bindPopup(popup_f170576e44ae6f0521d2bb800df4c722)
+        ;
+
+        
+    
+    
+            marker_d7831992c1b9552d238c974a16966084.bindTooltip(
+                `<div>
+                     수거 지점 #8
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_77ff9d60049ee4a29d7e6291f888aa7e = L.marker(
+                [36.3708903770045, 127.420652799975],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_0ecc5fb2d05965db6724ac7064ab304e = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "9", "textColor": "#2980b9"}
+            )
+            marker_77ff9d60049ee4a29d7e6291f888aa7e.setIcon(beautify_icon_0ecc5fb2d05965db6724ac7064ab304e);
+        
+    
+        var popup_0d12dcbc3d26e29069c58ec7c18e3063 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_bc6c8ec5bf3c612f20dbc1dd68dea346 = $(`<div id="html_bc6c8ec5bf3c612f20dbc1dd68dea346" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #9</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-07-21 21:35</td>                 </tr>                 <tr><td>대형폐기물</td><td class='text-right'>3개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">3개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_0d12dcbc3d26e29069c58ec7c18e3063.setContent(html_bc6c8ec5bf3c612f20dbc1dd68dea346);
+            
+        
+
+        marker_77ff9d60049ee4a29d7e6291f888aa7e.bindPopup(popup_0d12dcbc3d26e29069c58ec7c18e3063)
+        ;
+
+        
+    
+    
+            marker_77ff9d60049ee4a29d7e6291f888aa7e.bindTooltip(
+                `<div>
+                     수거 지점 #9
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_d5e5891340b078b5da15b4a485848768 = L.marker(
+                [36.3711268193781, 127.417963858483],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_f485b5f53728be54be6cb5b331726569 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "10", "textColor": "#2980b9"}
+            )
+            marker_d5e5891340b078b5da15b4a485848768.setIcon(beautify_icon_f485b5f53728be54be6cb5b331726569);
+        
+    
+        var popup_e51ab7e1b507d205a3617e983487c114 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_2a57ccea017f837f6ce40edb0e90e7bd = $(`<div id="html_2a57ccea017f837f6ce40edb0e90e7bd" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #10</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-01-02 21:35</td>                 </tr>                 <tr><td>pp마대</td><td class='text-right'>3개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">3개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_e51ab7e1b507d205a3617e983487c114.setContent(html_2a57ccea017f837f6ce40edb0e90e7bd);
+            
+        
+
+        marker_d5e5891340b078b5da15b4a485848768.bindPopup(popup_e51ab7e1b507d205a3617e983487c114)
+        ;
+
+        
+    
+    
+            marker_d5e5891340b078b5da15b4a485848768.bindTooltip(
+                `<div>
+                     수거 지점 #10
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_a31f82a96f8a53130c089ada89487845 = L.marker(
+                [36.3748855678287, 127.40528857583],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_c92c7942b62bd01b54dbaf8ffb36f569 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "11", "textColor": "#2980b9"}
+            )
+            marker_a31f82a96f8a53130c089ada89487845.setIcon(beautify_icon_c92c7942b62bd01b54dbaf8ffb36f569);
+        
+    
+        var popup_aa700eebd1110fd781d85c311d94acd0 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_90cdaf7c5f1f20c9bda855ccfc77c4b1 = $(`<div id="html_90cdaf7c5f1f20c9bda855ccfc77c4b1" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #11</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-02-22 21:35</td>                 </tr>                 <tr><td>대형폐기물</td><td class='text-right'>1개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">1개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_aa700eebd1110fd781d85c311d94acd0.setContent(html_90cdaf7c5f1f20c9bda855ccfc77c4b1);
+            
+        
+
+        marker_a31f82a96f8a53130c089ada89487845.bindPopup(popup_aa700eebd1110fd781d85c311d94acd0)
+        ;
+
+        
+    
+    
+            marker_a31f82a96f8a53130c089ada89487845.bindTooltip(
+                `<div>
+                     수거 지점 #11
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_f775fd30616c57cc26f6ebf24a8b9715 = L.marker(
+                [36.3651740419809, 127.370555407294],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_81b6b7462e7c4b4931f3bea3925f2a6d = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "12", "textColor": "#2980b9"}
+            )
+            marker_f775fd30616c57cc26f6ebf24a8b9715.setIcon(beautify_icon_81b6b7462e7c4b4931f3bea3925f2a6d);
+        
+    
+        var popup_963ba58e804a5dcb4dfcd700f1e4b042 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_2d972266e80517a2dbe7d3f6796af86e = $(`<div id="html_2d972266e80517a2dbe7d3f6796af86e" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #12</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-03-09 21:35</td>                 </tr>                 <tr><td>pp마대</td><td class='text-right'>10개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">10개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_963ba58e804a5dcb4dfcd700f1e4b042.setContent(html_2d972266e80517a2dbe7d3f6796af86e);
+            
+        
+
+        marker_f775fd30616c57cc26f6ebf24a8b9715.bindPopup(popup_963ba58e804a5dcb4dfcd700f1e4b042)
+        ;
+
+        
+    
+    
+            marker_f775fd30616c57cc26f6ebf24a8b9715.bindTooltip(
+                `<div>
+                     수거 지점 #12
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_54de2cc51fe64189d8cf497bd1d2e60f = L.marker(
+                [36.3461932883006, 127.352210720458],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_5a14953352fc9a687de94c6519c89695 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "13", "textColor": "#2980b9"}
+            )
+            marker_54de2cc51fe64189d8cf497bd1d2e60f.setIcon(beautify_icon_5a14953352fc9a687de94c6519c89695);
+        
+    
+        var popup_b3f9fe1003145ba2f0b085e5640519d8 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_8d71b46b174e6148dd6aaa45851ef740 = $(`<div id="html_8d71b46b174e6148dd6aaa45851ef740" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #13</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-06-19 21:35</td>                 </tr>                 <tr><td>대형폐기물</td><td class='text-right'>1개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">1개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_b3f9fe1003145ba2f0b085e5640519d8.setContent(html_8d71b46b174e6148dd6aaa45851ef740);
+            
+        
+
+        marker_54de2cc51fe64189d8cf497bd1d2e60f.bindPopup(popup_b3f9fe1003145ba2f0b085e5640519d8)
+        ;
+
+        
+    
+    
+            marker_54de2cc51fe64189d8cf497bd1d2e60f.bindTooltip(
+                `<div>
+                     수거 지점 #13
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_9ca8d44adcfeb96bac3cfe726dcb86b4 = L.marker(
+                [36.3909863044655, 127.412763471514],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_7b5f1b6ee3c8d587e2e573414cf502df = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "14", "textColor": "#2980b9"}
+            )
+            marker_9ca8d44adcfeb96bac3cfe726dcb86b4.setIcon(beautify_icon_7b5f1b6ee3c8d587e2e573414cf502df);
+        
+    
+        var popup_1fb7b95189b77e0c21d17ee2734aa8af = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_1395bf0fb67b04cffaf7d7938e37906c = $(`<div id="html_1395bf0fb67b04cffaf7d7938e37906c" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #14</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-02-09 21:35</td>                 </tr>                 <tr><td>대형폐기물</td><td class='text-right'>4개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">4개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_1fb7b95189b77e0c21d17ee2734aa8af.setContent(html_1395bf0fb67b04cffaf7d7938e37906c);
+            
+        
+
+        marker_9ca8d44adcfeb96bac3cfe726dcb86b4.bindPopup(popup_1fb7b95189b77e0c21d17ee2734aa8af)
+        ;
+
+        
+    
+    
+            marker_9ca8d44adcfeb96bac3cfe726dcb86b4.bindTooltip(
+                `<div>
+                     수거 지점 #14
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_8b85fee32e6742953cec16d06c435238 = L.marker(
+                [36.3764099580618, 127.413657867509],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_c3c34d8d3851d7fe186495299ec833e1 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "15", "textColor": "#2980b9"}
+            )
+            marker_8b85fee32e6742953cec16d06c435238.setIcon(beautify_icon_c3c34d8d3851d7fe186495299ec833e1);
+        
+    
+        var popup_48d6cf6c4a034c1755fa20dfe50e3df4 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_a666cb0fe4ff58d050e4aeae5769928d = $(`<div id="html_a666cb0fe4ff58d050e4aeae5769928d" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #15</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-06-18 21:35</td>                 </tr>                 <tr><td>대형폐기물</td><td class='text-right'>10개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">10개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_48d6cf6c4a034c1755fa20dfe50e3df4.setContent(html_a666cb0fe4ff58d050e4aeae5769928d);
+            
+        
+
+        marker_8b85fee32e6742953cec16d06c435238.bindPopup(popup_48d6cf6c4a034c1755fa20dfe50e3df4)
+        ;
+
+        
+    
+    
+            marker_8b85fee32e6742953cec16d06c435238.bindTooltip(
+                `<div>
+                     수거 지점 #15
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_7b9bff992d80d0808d5eaedf51026938 = L.marker(
+                [36.3188847980357, 127.347774444734],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_425442784a448cb2c99a5ec0c9ea6de6 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "16", "textColor": "#2980b9"}
+            )
+            marker_7b9bff992d80d0808d5eaedf51026938.setIcon(beautify_icon_425442784a448cb2c99a5ec0c9ea6de6);
+        
+    
+        var popup_dd147425589e9f22a40ba516b85f8a68 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_6656bd31372ddede7bab6175a52ceadc = $(`<div id="html_6656bd31372ddede7bab6175a52ceadc" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #16</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-03-13 21:35</td>                 </tr>                 <tr><td>대형폐기물</td><td class='text-right'>5개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">5개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_dd147425589e9f22a40ba516b85f8a68.setContent(html_6656bd31372ddede7bab6175a52ceadc);
+            
+        
+
+        marker_7b9bff992d80d0808d5eaedf51026938.bindPopup(popup_dd147425589e9f22a40ba516b85f8a68)
+        ;
+
+        
+    
+    
+            marker_7b9bff992d80d0808d5eaedf51026938.bindTooltip(
+                `<div>
+                     수거 지점 #16
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_1fd89f2f705bc6fe7e1b0074b6aafa7e = L.marker(
+                [36.3382864924639, 127.349495272417],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_ea6553188ad284e8e44f6735562c1d27 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "17", "textColor": "#2980b9"}
+            )
+            marker_1fd89f2f705bc6fe7e1b0074b6aafa7e.setIcon(beautify_icon_ea6553188ad284e8e44f6735562c1d27);
+        
+    
+        var popup_e1de3f4cf0649caf9577f699a4ccdcba = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_c3303c1c1c35602950a59e3ea3a5f56d = $(`<div id="html_c3303c1c1c35602950a59e3ea3a5f56d" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #17</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2023-12-03 21:35</td>                 </tr>                 <tr><td>pp마대</td><td class='text-right'>3개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">3개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_e1de3f4cf0649caf9577f699a4ccdcba.setContent(html_c3303c1c1c35602950a59e3ea3a5f56d);
+            
+        
+
+        marker_1fd89f2f705bc6fe7e1b0074b6aafa7e.bindPopup(popup_e1de3f4cf0649caf9577f699a4ccdcba)
+        ;
+
+        
+    
+    
+            marker_1fd89f2f705bc6fe7e1b0074b6aafa7e.bindTooltip(
+                `<div>
+                     수거 지점 #17
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_b597d5cc36fefd2ee1affbcdbe25fd07 = L.marker(
+                [36.3148738332534, 127.345813404805],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_74998fe33b3226b0790f8d02895f0c01 = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "18", "textColor": "#2980b9"}
+            )
+            marker_b597d5cc36fefd2ee1affbcdbe25fd07.setIcon(beautify_icon_74998fe33b3226b0790f8d02895f0c01);
+        
+    
+        var popup_b8355652a391918f9051eee3e5cfa4d8 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_6487e0af1ffa507636e345ee4d088b5b = $(`<div id="html_6487e0af1ffa507636e345ee4d088b5b" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #18</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-07-05 21:35</td>                 </tr>                 <tr><td>대형폐기물</td><td class='text-right'>7개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">7개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_b8355652a391918f9051eee3e5cfa4d8.setContent(html_6487e0af1ffa507636e345ee4d088b5b);
+            
+        
+
+        marker_b597d5cc36fefd2ee1affbcdbe25fd07.bindPopup(popup_b8355652a391918f9051eee3e5cfa4d8)
+        ;
+
+        
+    
+    
+            marker_b597d5cc36fefd2ee1affbcdbe25fd07.bindTooltip(
+                `<div>
+                     수거 지점 #18
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_21adad5cfd51b34cffce5520f6326e1c = L.marker(
+                [36.3160898224819, 127.345617668779],
+                {}
+            ).addTo(map_94d94eaa3a0c979b0dd27eb850c32cb7);
+        
+    
+            var beautify_icon_ca40e4c0b03ee9974100a16448a7819e = new L.BeautifyIcon.icon(
+                {"backgroundColor": "white", "borderColor": "#2980b9", "borderWidth": 3, "icon": "circle", "iconShape": "circle", "innerIconStyle": "", "isAlphaNumericIcon": true, "spin": false, "text": "19", "textColor": "#2980b9"}
+            )
+            marker_21adad5cfd51b34cffce5520f6326e1c.setIcon(beautify_icon_ca40e4c0b03ee9974100a16448a7819e);
+        
+    
+        var popup_124b8c0c5c751563a727e2918bf2211e = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_84f3d91f909d13cf0c105e6228a1de26 = $(`<div id="html_84f3d91f909d13cf0c105e6228a1de26" style="width: 100.0%; height: 100.0%;">         <div class="popup-content">             <style>                 .popup-content {                     font-family: 'Malgun Gothic', sans-serif;                     padding: 10px;                     min-width: 200px;                 }                 .popup-header {                     font-size: 16px;                     font-weight: bold;                     margin-bottom: 10px;                     color: #f39c12;                 }                 .info-table {                     width: 100%;                     border-collapse: collapse;                 }                 .info-table td {                     padding: 3px 0;                 }                 .text-right {                     text-align: right;                 }                 .total-row {                     border-top: 2px solid #ddd;                     font-weight: bold;                 }             </style>             <div class="popup-header">수거 지점 #19</div>             <table class="info-table">                 <tr>                     <td colspan="2">🕒 2024-09-17 21:35</td>                 </tr>                 <tr><td>대형폐기물</td><td class='text-right'>10개</td></tr>                 <tr class="total-row">                     <td>총 폐기물</td>                     <td class="text-right">10개</td>                 </tr>             </table>         </div>         </div>`)[0];
+                popup_124b8c0c5c751563a727e2918bf2211e.setContent(html_84f3d91f909d13cf0c105e6228a1de26);
+            
+        
+
+        marker_21adad5cfd51b34cffce5520f6326e1c.bindPopup(popup_124b8c0c5c751563a727e2918bf2211e)
+        ;
+
+        
+    
+    
+            marker_21adad5cfd51b34cffce5520f6326e1c.bindTooltip(
+                `<div>
+                     수거 지점 #19
+                 </div>`,
+                {"sticky": true}
+            );
+        
+</script>
+</html>

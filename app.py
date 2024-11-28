@@ -1,12 +1,17 @@
 ##  ! 터미널에 "streamlit run app.py" 라고 입력하면 실행됨 
 
 import glob
+import time
 import streamlit as st
 import os
 import pandas as pd
 from streamlit import components
 from ultralytics import YOLO
 import cv2
+
+from src.main import make_route
+from src.visualize.visualize_nodes import visualize_nodemap
+from src.visualize.visualize_routes import visualize_routemap
 
 def save_image(uploaded_files):
     for file in uploaded_files:
@@ -23,7 +28,6 @@ def show_map(html_file):
             components.v1.html(html_content, height=600, scrolling=True)
     else:
         st.error("지도 파일을 찾을 수 없습니다.")
-
 
 def analyze_images():
     model_path = 'model/best.pt'
@@ -62,6 +66,13 @@ def analyze_images():
 
     return pd.DataFrame(results)
 
+def make_node_map() :
+    visualize_nodemap()
+
+def make_route_map() :
+    make_route()
+    visualize_routemap()
+
 def initalize_state() : 
     if 'images' not in st.session_state:
         st.session_state['images'] = []
@@ -70,20 +81,6 @@ def initalize_state() :
     if 'page' not in st.session_state:
         st.session_state['page'] = 1  # 첫 번째 페이지로 초기화
 
-data = [
-    [
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Plastic_bottles_ready_for_recycling.jpg/640px-Plastic_bottles_ready_for_recycling.jpg",
-        "대전 유성구 궁동99",
-        "PP마대",
-        False
-    ],
-    [
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Litter_in_Budapest.jpg/640px-Litter_in_Budapest.jpg",
-        "대전 유성구 궁동99",
-        "대형폐기물, PP마대",
-        True
-    ],
-]
 
 def main():
     st.set_page_config(page_title="리빙랩 데모", layout="wide")
@@ -100,7 +97,7 @@ def main():
                 save_image(uploaded_files)
             
             if st.session_state['show_map']:
-                map_html_file = "store/node_map1.html"  # 예시 파일 이름
+                map_html_file = "store/node_map.html"  # 예시 파일 이름
                 show_map(map_html_file)
 
             # 이미지 표시
@@ -117,6 +114,8 @@ def main():
             with left:
                 if st.button("이미지 분석하기"):
                     # analyze_images()
+                    make_node_map()
+                    time.sleep(1)
                     st.session_state['show_map'] = True
                     st.rerun()
             with right:
@@ -146,29 +145,39 @@ def main():
         if st.button("이전 페이지로 돌아가기"):
             st.session_state['page'] = 1
             st.rerun()
-            
-        col1, col2 = st.columns([2, 1])
 
+        col1, col2 = st.columns([2, 1])
+        data = pd.read_csv('store/result1.csv')
+        df = data[:-2]
         with col1:
-            map_html_file = "store/result1_waste_route_map.html"  # 예시 파일 이름
+            map_html_file = 'store/result_waste_route_map.html'
+            make_route_map()
             show_map(map_html_file)
-            
+
         with col2:
             st.markdown("## 폐기물 리스트")
-            # CSV 파일 읽기
-            if os.path.exists('route_input.csv'):
-                data = pd.read_csv('route_input.csv')
+
+            # 테이블 데이터 준비
+            table_data = df[['수거순서','쓰레기확인시간', '위도', '경도', '폐기물종류', '폐기물개수']].copy()
             
-                for i, row in data.iterrows():
-                    cols = st.columns([1, 2, 2, 1])
-                    with cols[0]:
-                        st.image(row['image'], width=70)  # 이미지 URL 혹은 경로
-                    with cols[1]:
-                        st.write(row['address'])
-                    with cols[2]:
-                        st.write(row['type'])
-                    with cols[3]:
-                        st.write(row['score'])
+            table_data['위치'] = table_data.apply(lambda row: f"{row['위도']:.4f}, {row['경도']:.4f}", axis=1)# <------------------------------------------------- 여기서 위도 경도 수정 하시면 됩니다.
+
+            table_data = table_data.drop(['위도', '경도'], axis=1) 
+
+            table_data['쓰레기확인시간'] = pd.to_datetime(table_data['쓰레기확인시간']).dt.strftime('%Y-%m-%d %H:%M:%S')
+            table_data = table_data[['수거순서','쓰레기확인시간', '위치', '폐기물종류', '폐기물개수']]
+
+            # 폐기물 개수를 정수로 변환
+            table_data['폐기물개수'] = table_data['폐기물개수'].astype(int)
+
+            # 테이블 표시 (인덱스 숨김)
+            st.dataframe(table_data, hide_index=True, column_config={
+                "폐기물개수": st.column_config.NumberColumn(
+                    "폐기물개수",
+                    help="수거할 폐기물의 개수",
+                    format="%d"
+                )
+            })
 
 
 if __name__ == "__main__":

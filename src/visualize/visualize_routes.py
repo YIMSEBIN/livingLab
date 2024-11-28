@@ -1,10 +1,9 @@
-import sys
 import pandas as pd
 import folium
 from folium import plugins
 import branca
 import requests
-from secret_key.secrets_manager import get_secret_key
+from src.secret_key.secrets_manager import get_secret_key
 
 class WasteRouteVisualizer:
     def __init__(self, api_key):
@@ -108,7 +107,7 @@ class WasteRouteVisualizer:
 
     def create_legend(self, colormap):
         """지도 범례 생성"""
-        legend_html = colormap.to_step(index=[1, 2, 3, 4, 5])._repr_html_()
+        legend_html = colormap.to_step(index=[1, 2, 3, 4, 5, 6])._repr_html_()
         return f"""
         <div style="position: fixed; 
                     bottom: 50px; right: 50px; 
@@ -123,11 +122,12 @@ class WasteRouteVisualizer:
             <div><span style="color: {self.colors['normal']};">●</span> 수거 지점</div>
             <div><span style="color: {self.colors['route']};">━━</span> 이동 경로</div>
             <div style="margin-top: 5px; border-top: 1px solid #ddd; padding-top: 5px;">
-                <div style="font-weight: bold; margin-bottom: 3px;">폐기물 위치 가능성</div>
+                <div style="font-weight: bold; margin-bottom: 3px;">폐기물 존재 확률</div>
                 {legend_html}
             </div>
         </div>
         """
+
 
     def visualize(self, input_csv, output_html):
         """폐기물 수거 경로 시각화 생성"""
@@ -152,13 +152,14 @@ class WasteRouteVisualizer:
 
         # 마커 및 경로 추가
         total_points = df['수거순서'].nunique()
+        unique_points = df.drop_duplicates('수거순서')
 
         for idx, (order, group) in enumerate(df.groupby('수거순서')):
             point_type = "시작 지점" if order == 1 else "종료 지점" if order == total_points else "수거 지점"
             color = (self.colors['start'] if order == 1 
                     else self.colors['end'] if order == total_points 
                     else self.colors['normal'])
-            
+            # print(colormap.rgb_hex_str(1))
             first_row = group.iloc[0]
             
             # 마커 추가
@@ -181,6 +182,34 @@ class WasteRouteVisualizer:
                 tooltip=f"{point_type} #{order}"
             ).add_to(m)
 
+            # 경로 추가
+            if idx < len(unique_points) - 1:
+                start = (first_row['위도'], first_row['경도'])
+                next_point = unique_points.iloc[idx + 1]
+                end = (next_point['위도'], next_point['경도'])
+                
+                route_data = self.get_route(start, end)
+                if route_data and 'routes' in route_data:
+                    try:
+                        coordinates = []
+                        for section in route_data['routes'][0]['sections']:
+                            for road in section['roads']:
+                                vertices = road['vertexes']
+                                for i in range(0, len(vertices), 2):
+                                    coordinates.append((vertices[i+1], vertices[i]))
+                        
+                        folium.PolyLine(
+                            coordinates,
+                            color=self.colors['route'],
+                            weight=3,
+                            opacity=0.8,
+                            tooltip=f"구간 {order} → {order + 1}"
+                        ).add_to(m)
+                    except Exception as e:
+                        print(route_data)
+                        print(f"경로 처리 중 오류 발생: {e}")
+                        print("출발지와 도착지가 5m 이내인 경우는 경로 표시가 없어도 괜찮은 수준임.")
+
         # 범례 추가
         m.get_root().html.add_child(folium.Element(self.create_legend(colormap)))
         
@@ -188,18 +217,11 @@ class WasteRouteVisualizer:
         m.save(output_html)
         print(f"지도 생성 완료: {output_html}")
 
-
-def main() :
+def visualize_routemap() :
     API_KEY = get_secret_key()
 
-    for i in range(1, 9) :
-        # 실행
-        input_csv_path = f"store/result{i}.csv"
-        output_html_path = f"store/node_map{i}.html"
+    input_csv_path = f"store/result.csv"
+    output_html_path = f"store/result_waste_route_map.html"
 
-        visualizer = WasteRouteVisualizer(API_KEY)
-        visualizer.visualize(input_csv_path, output_html_path)
-
-
-if __name__ == "__main__":
-    main()
+    visualizer = WasteRouteVisualizer(API_KEY)
+    visualizer.visualize(input_csv_path, output_html_path)
