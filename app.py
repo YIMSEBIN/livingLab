@@ -71,6 +71,7 @@ def make_node_map() :
 
 def make_route_map() :
     make_route()
+    # time.sleep(100)
     visualize_routemap()
 
 def initalize_state() : 
@@ -80,6 +81,11 @@ def initalize_state() :
         st.session_state['show_map'] = False
     if 'page' not in st.session_state:
         st.session_state['page'] = 1  # 첫 번째 페이지로 초기화
+    if 'selection_status' not in st.session_state:
+        # 선택 상태를 저장하는 리스트 초기화
+        data = pd.read_csv('store/route_input.csv')
+        st.session_state['selection_status'] = [True] * len(data)  # 모든 항목을 기본적으로 선택된 상태로 초기화
+
 
 
 def main():
@@ -120,6 +126,15 @@ def main():
                     st.rerun()
             with right:
                 if st.button("경로 도출하기"):
+                    df = pd.read_csv('store/route_input.csv')
+                    # 선택된 항목만 포함하는 데이터프레임 생성
+                    selected_df = df[st.session_state['selection_status']]
+                    # 선택된 데이터 저장
+                    selected_df.to_csv('store/route_input_after_demo.csv', index=False)
+                    time.sleep(5)
+                    # st.success("선택된 데이터가 저장되었습니다.")
+
+                    make_route_map()
                     st.session_state['page'] = 2
                     st.rerun()
                     
@@ -139,7 +154,14 @@ def main():
                     with cols[2]:
                         st.write(row['type'])
                     with cols[3]:
-                        st.write(row['score'])
+                        if i == 0 or i == len(data)-1 :
+                            st.markdown(f"수거지점")
+                        else :
+                            # 체크박스로 폐기물 선택 가능하게 설정
+                            checkbox_label = f"Select {row['type']} at {row['address']}"
+                            is_selected = st.checkbox(checkbox_label, key=i, value=st.session_state['selection_status'][i], label_visibility="collapsed")
+                            # 선택 상태 업데이트
+                            st.session_state['selection_status'][i] = is_selected
 
     elif st.session_state['page'] == 2:
         if st.button("이전 페이지로 돌아가기"):
@@ -147,11 +169,10 @@ def main():
             st.rerun()
 
         col1, col2 = st.columns([2, 1])
-        data = pd.read_csv('store/result1.csv')
+        data = pd.read_csv('store/result.csv')
         df = data[:-2]
         with col1:
             map_html_file = 'store/result_waste_route_map.html'
-            make_route_map()
             show_map(map_html_file)
 
         with col2:

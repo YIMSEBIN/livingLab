@@ -9,10 +9,11 @@ def make_route():
     API_KEY = get_secret_key()                  # 카카오 REST API 키
     TRASH_COST_PATH = 'docs/TrashCost.xlsx'     # 쓰레기 유형에 따른 비용 파일
     DISTANCE_MATRIX_FILE = f'store/distance_matrix.csv'  # 거리 행렬 파일 이름
-    INPUT_DATA_PATH = f'store/route_input.csv'               # input Data 파일
+    INPUT_DATA_PATH = f'store/route_input_after_demo.csv'               # input Data 파일
     OUTPUT_DATA_PATH = f'store/result.csv'
 
-    input_data = select_data(INPUT_DATA_PATH, 20)
+    input_data = pd.read_csv(INPUT_DATA_PATH, encoding='UTF8')
+    # input_data = select_data(INPUT_DATA_PATH, 20)
     trash_cost_data = pd.read_excel(TRASH_COST_PATH)
 
     # Parameter1. locations : 폐기물 주소 정보(도로명주소, 위도, 경도, type, count, time)

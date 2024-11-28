@@ -88,6 +88,7 @@ class CombinedRouteVisualizer:
         legend_html = colormap.to_step(index=[1, 2, 3, 4, 5])._repr_html_()
         return f"""
         <div style="position: fixed; 
+                    width: 600px;
                     bottom: 50px; right: 50px; 
                     background: white;
                     padding: 10px;
@@ -96,14 +97,10 @@ class CombinedRouteVisualizer:
                     font-family: 'Malgun Gothic', sans-serif;
                     z-index: 1000;">
             <div style="font-weight: bold; margin-bottom: 5px;">수거 경로 안내</div>
-            <div><span style="color: {self.colors['start']};">●</span> 시작 지점</div>
             <div><span style="color: {self.colors['normal']};">●</span> 수거 지점</div>
-            <div><span style="color: {self.colors['end']};">●</span> 종료 지점</div>
-            <div><span style="color: {self.colors['route']};">━━</span> 이동 경로</div>
-            <div style="margin-top: 5px; border-top: 1px solid #ddd; padding-top: 5px;">
-                <div style="font-weight: bold; margin-bottom: 3px;">총 폐기물 수량</div>
-                {legend_html}
-            </div>
+            <div><span style="color: {self.colors['end']};">●</span> 시작 및 종료 지점</div>
+            <div><span style="color: {self.colors['route']};">━━</span> 기존 이동 경로</div>
+            <div><span style="color: {self.colors['end']};">━━</span> 최적 이동 경로</div>
         </div>
         """
 
@@ -166,9 +163,9 @@ class CombinedRouteVisualizer:
 
             start_coords = (current['위도'], current['경도'])
             end_coords = (next_point['위도'], next_point['경도'])
-
             route_response = self.get_route(start_coords, end_coords)
-            if route_response and 'routes' in route_response:
+            
+            if route_response and 'routes' in route_response and 'summary' in route_response['routes'][0]:
                 coordinates = []
                 for section in route_response['routes'][0].get('sections', []):
                     for road in section.get('roads', []):
