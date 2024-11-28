@@ -107,7 +107,7 @@ class WasteRouteVisualizer:
 
     def create_legend(self, colormap):
         """지도 범례 생성"""
-        legend_html = colormap.to_step(index=[1, 2, 3, 4, 5])._repr_html_()
+        legend_html = colormap.to_step(index=[1, 2, 3, 4, 5, 6])._repr_html_()
         return f"""
         <div style="position: fixed; 
                     bottom: 50px; right: 50px; 
@@ -122,7 +122,7 @@ class WasteRouteVisualizer:
             <div><span style="color: {self.colors['normal']};">●</span> 수거 지점</div>
             <div><span style="color: {self.colors['route']};">━━</span> 이동 경로</div>
             <div style="margin-top: 5px; border-top: 1px solid #ddd; padding-top: 5px;">
-                <div style="font-weight: bold; margin-bottom: 3px;">총 폐기물 수량</div>
+                <div style="font-weight: bold; margin-bottom: 3px;">폐기물 존재 확률</div>
                 {legend_html}
             </div>
         </div>

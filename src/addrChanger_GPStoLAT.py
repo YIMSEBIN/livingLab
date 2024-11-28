@@ -45,7 +45,6 @@ def geocode_address(address_list):
             lat_lon.append((None, None))  # 요청 실패 시
     return lat_lon
 
-
 def putStartData(result):
     result.loc[0, 'type'] = "대형폐기물"
     result.loc[0, 'count'] = 0
@@ -62,7 +61,6 @@ def putStartData(result):
     result['count'] = result['count'].astype(int)
     result['time'] = pd.to_datetime(result['time'], errors = 'coerce')
     return result
-
 
 def addrChangerToLAT(input_file_path, output_file_path):
 

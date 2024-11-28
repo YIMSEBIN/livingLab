@@ -1,8 +1,12 @@
 ##  ! 터미널에 "streamlit run app.py" 라고 입력하면 실행됨 
 
+import glob
 import streamlit as st
 import os
+import pandas as pd
 from streamlit import components
+from ultralytics import YOLO
+import cv2
 
 def save_image(uploaded_files):
     for file in uploaded_files:
@@ -19,6 +23,44 @@ def show_map(html_file):
             components.v1.html(html_content, height=600, scrolling=True)
     else:
         st.error("지도 파일을 찾을 수 없습니다.")
+
+
+def analyze_images():
+    model_path = 'model/best.pt'
+    # 모델 파일 존재 여부 확인
+    if not os.path.exists(model_path):
+        return None
+    model = YOLO(model_path)
+
+    image_files = glob.glob('./data/*')
+    results = []
+
+    for img_path in image_files:
+        # 이미지 로드 및 추론
+        prediction = model(img_path)
+
+        # 원본 이미지 로드
+        img = cv2.imread(img_path)
+
+        for pred in prediction[0].boxes.data:
+            x1, y1, x2, y2, conf, cls = pred
+            results.append({
+                '이미지': os.path.basename(img_path),
+                '위치': f'({x1:.2f}, {y1:.2f}, {x2:.2f}, {y2:.2f})',
+                '종류': model.names[int(cls)],
+                '신뢰도': f'{conf:.2f}',
+                '수거여부': '미수거'
+            })
+
+            # 바운딩 박스 그리기
+            cv2.rectangle(img, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
+            label = f"{model.names[int(cls)]}: {conf:.2f}"
+            cv2.putText(img, label, (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+        # 결과 이미지 저장
+        cv2.imwrite(f"./results/{os.path.basename(img_path)}", img)
+
+    return pd.DataFrame(results)
 
 def initalize_state() : 
     if 'images' not in st.session_state:
@@ -74,25 +116,31 @@ def main():
             left, right = st.columns([1, 1])  # 비율을 조정하여 버튼 위치 변경 가능
             with left:
                 if st.button("이미지 분석하기"):
+                    # analyze_images()
                     st.session_state['show_map'] = True
                     st.rerun()
             with right:
                 if st.button("경로 도출하기"):
                     st.session_state['page'] = 2
                     st.rerun()
-
+                    
             st.markdown("## 폐기물 리스트")
 
-            for i, row in enumerate(data):
-                cols = st.columns([1, 2, 2, 1])
-                with cols[0]:
-                    st.image(row[0], width=70)
-                with cols[1]:
-                    st.write(row[1])
-                with cols[2]:
-                    st.write(row[2])
-                with cols[3]:
-                    st.checkbox("수거 여부", value=row[3], key=f"checkbox_{i}")
+            # CSV 파일 읽기
+            if st.session_state['show_map']:
+
+                data = pd.read_csv('store/route_input.csv')
+            
+                for i, row in data.iterrows():
+                    cols = st.columns([1, 2, 2, 1])
+                    with cols[0]:
+                        st.image(f'data/{row['image']}', width=70)  # 이미지 URL 혹은 경로
+                    with cols[1]:
+                        st.write(row['address'])
+                    with cols[2]:
+                        st.write(row['type'])
+                    with cols[3]:
+                        st.write(row['score'])
 
     elif st.session_state['page'] == 2:
         if st.button("이전 페이지로 돌아가기"):
@@ -107,17 +155,20 @@ def main():
             
         with col2:
             st.markdown("## 폐기물 리스트")
-
-            for i, row in enumerate(data):
-                cols = st.columns([1, 2, 2, 1])
-                with cols[0]:
-                    st.write(row[1])
-                with cols[1]:
-                    st.image(row[0], width=70)
-                with cols[2]:
-                    st.write(row[2])
-                with cols[3]:
-                    st.write(row[3])
+            # CSV 파일 읽기
+            if os.path.exists('route_input.csv'):
+                data = pd.read_csv('route_input.csv')
+            
+                for i, row in data.iterrows():
+                    cols = st.columns([1, 2, 2, 1])
+                    with cols[0]:
+                        st.image(row['image'], width=70)  # 이미지 URL 혹은 경로
+                    with cols[1]:
+                        st.write(row['address'])
+                    with cols[2]:
+                        st.write(row['type'])
+                    with cols[3]:
+                        st.write(row['score'])
 
 
 if __name__ == "__main__":
