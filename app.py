@@ -94,17 +94,21 @@ def main():
     initalize_state()
     
     if st.session_state['page'] == 1:
-        col1, col2 = st.columns([2, 1])
+        col1, col2 = st.columns([1, 3])
 
         with col1:
-            st.markdown("### 이미지를 업로드하세요")
-            uploaded_files = st.file_uploader(label="Choose an image file", type=['png', 'jpg', 'jpeg'], accept_multiple_files=True)
-            if uploaded_files:
-                save_image(uploaded_files)
             
             if st.session_state['show_map']:
                 map_html_file = "store/node_map.html"  # 예시 파일 이름
                 show_map(map_html_file)
+            else :
+                map_html_file = "store/empty_map.html"  # 예시 파일 이름
+                show_map(map_html_file)
+            # st.markdown("### 이미지를 업로드하세요")
+            uploaded_files = st.file_uploader(label="Choose an image file", type=['png', 'jpg', 'jpeg'], accept_multiple_files=True)
+            if uploaded_files:
+                save_image(uploaded_files)
+
 
             # 이미지 표시
             if st.session_state["images"]:
@@ -132,36 +136,48 @@ def main():
                     # 선택된 데이터 저장
                     selected_df.to_csv('store/route_input_after_demo.csv', index=False)
                     time.sleep(5)
-                    # st.success("선택된 데이터가 저장되었습니다.")
-
+                    st.success("선택된 데이터가 저장되었습니다.")
+                    
                     make_route_map()
                     st.session_state['page'] = 2
                     st.rerun()
                     
-            st.markdown("## 폐기물 리스트")
+            st.markdown("#### ✅ 폐기물 리스트")
 
             # CSV 파일 읽기
             if st.session_state['show_map']:
 
                 data = pd.read_csv('store/route_input.csv')
             
+                cols = st.columns([1, 10, 1, 15, 1, 15, 1, 10, 1])
+                with cols[1]:
+                    st.markdown(f"###### 이미지")
+                with cols[3]:
+                    st.markdown(f"###### 주소")
+                with cols[5]:
+                    st.markdown(f"###### 폐기물 종류")
+                with cols[7]:
+                    st.markdown(f"###### 수거여부")
+                st.markdown('---')
+
                 for i, row in data.iterrows():
-                    cols = st.columns([1, 2, 2, 1])
-                    with cols[0]:
-                        st.image(f'data/{row['image']}', width=70)  # 이미지 URL 혹은 경로
+                    cols = st.columns([1, 10, 1, 15, 1, 15, 1, 10, 1])
                     with cols[1]:
-                        st.write(row['address'])
-                    with cols[2]:
-                        st.write(row['type'])
+                        st.image(f'data/{row['image']}', width=1000)  # 이미지 URL 혹은 경로
                     with cols[3]:
+                        st.write(f'{row['address']}')
+                    with cols[5]:
+                        st.write(row['type'])
+                    with cols[7]:
                         if i == 0 or i == len(data)-1 :
-                            st.markdown(f"수거지점")
+                            st.markdown(f"시작지점")
                         else :
                             # 체크박스로 폐기물 선택 가능하게 설정
                             checkbox_label = f"Select {row['type']} at {row['address']}"
                             is_selected = st.checkbox(checkbox_label, key=i, value=st.session_state['selection_status'][i], label_visibility="collapsed")
                             # 선택 상태 업데이트
                             st.session_state['selection_status'][i] = is_selected
+                    st.markdown('---')
 
     elif st.session_state['page'] == 2:
         if st.button("이전 페이지로 돌아가기"):
@@ -176,7 +192,7 @@ def main():
             show_map(map_html_file)
 
         with col2:
-            st.markdown("## 폐기물 리스트")
+            st.markdown("## 폐기물 수거 경로")
 
             # 테이블 데이터 준비
             table_data = df[['수거순서','쓰레기확인시간', '위도', '경도', '폐기물종류', '폐기물개수']].copy()
