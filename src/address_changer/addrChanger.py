@@ -42,7 +42,7 @@ def main() :
     data = putStartData(data)
 
     # 결과를 새 엑셀 파일로 저장
-    data.to_csv(f"{output_file_path}",index=False)
+    data.to_csv(f"{output_file_path}",index=False, encoding='utf-8-sig')
     print(f"store/route_input.csv 파일을 저장했습니다.")
 
 if __name__ == "__main__":

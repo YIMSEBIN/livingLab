@@ -1,7 +1,7 @@
 import pandas as pd
 import requests
 
-from secret_key.secrets_manager import get_secret_key
+# from secret_key.secrets_manager import get_secret_key
 
 def GPS_to_address(data):
     coordinates = data.apply(lambda row: (row['Latitude'], row['Longitude']), axis=1).tolist()
@@ -20,7 +20,7 @@ def GPS_to_address(data):
             print(f"Geocoding failed for coordinates ({lat}, {lon})")
             return None
 
-    API_KEY = get_secret_key()
+    API_KEY = 'd0b15f0306696b205d1b2b084dc00c3d'
 
     # 각 좌표를 주소로 변환
     addresses = [geocode_address(lat, lon, API_KEY) for lat, lon in coordinates if lat is not None and lon is not None]

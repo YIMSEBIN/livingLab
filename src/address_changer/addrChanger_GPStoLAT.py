@@ -87,7 +87,7 @@ def addrChangerToLAT(input_file_path, output_file_path):
     result = putStartData(result)
 
     # 결과를 새 엑셀 파일로 저장
-    result.to_csv(f"{output_file_path}",index=False)
+    result.to_csv(f"{output_file_path}",index=False, encoding='utf-8-sig')
 
 for i in range(1, 9) :
     addrChangerToLAT(f'store/image_model_output{i}.csv',f'store/route_input{i}.csv',)

@@ -1,0 +1,10 @@
+names:
+- Large Waste Items
+- PP bag
+- General Waste
+- CleanNet
+nc: 4
+path: C:\Users\test\Desktop\waste detection.v4-add-pp-bag-8-1-1-.coco
+test: test\images
+train: train\images
+val: valid\images

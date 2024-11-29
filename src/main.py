@@ -1,16 +1,17 @@
 import pandas as pd
+import math
+import time
 from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
-from src.CVRP import create_data_model, print_solution
-from src.secret_key.secrets_manager import get_secret_key
-from src.select_oldest_waste import select_data
+from CVRP import create_data_model, print_solution
+# from src.secret_key.secrets_manager import get_secret_key
 
 def make_route():
-    API_KEY = get_secret_key()                  # 카카오 REST API 키
+    API_KEY = '993e67e5f9d2bc70937c00a2eb9964f5'                  # 카카오 REST API 키
     TRASH_COST_PATH = 'docs/TrashCost.xlsx'     # 쓰레기 유형에 따른 비용 파일
-    DISTANCE_MATRIX_FILE = f'store/distance_matrix.csv'  # 거리 행렬 파일 이름
-    INPUT_DATA_PATH = f'store/route_input_after_demo.csv'               # input Data 파일
-    OUTPUT_DATA_PATH = f'store/result.csv'
+    DISTANCE_MATRIX_FILE = f'store/distance_matrix{i}.csv'  # 거리 행렬 파일 이름
+    INPUT_DATA_PATH = f'store/route_input{i}.csv'               # input Data 파일
+    OUTPUT_DATA_PATH = f'store/result{i}.csv'
 
     input_data = pd.read_csv(INPUT_DATA_PATH, encoding='UTF8')
     # input_data = select_data(INPUT_DATA_PATH, 20)
@@ -75,11 +76,11 @@ def make_route():
         "Capacity",
     )
 
-    # 첫 솔루션 탐색 전략 설정
+    # 솔루션 탐색 전략 설정
     search_parameters = pywrapcp.DefaultRoutingSearchParameters()
     search_parameters.first_solution_strategy = routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC
     search_parameters.local_search_metaheuristic = routing_enums_pb2.LocalSearchMetaheuristic.GUIDED_LOCAL_SEARCH
-    search_parameters.time_limit.FromSeconds(30)  # 시간을 늘려 더 나은 솔루션 탐색
+    search_parameters.time_limit.FromSeconds(3)  # 시간을 늘려 더 나은 솔루션 탐색
 
     # 문제 해결
     solution = routing.SolveWithParameters(search_parameters)
@@ -89,3 +90,11 @@ def make_route():
         print_solution(data, manager, routing, solution, OUTPUT_DATA_PATH)
     else:
         print('솔루션 없음')
+
+for i in range(1, 9) :
+    
+    start = time.time()
+    make_route()
+    end = time.time()
+
+    print(f"{i}번째 폐기물리스트 최적경로 도출 시간 : {end - start:.5f} sec")

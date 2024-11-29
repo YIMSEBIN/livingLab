@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import random
+import copy
 import pandas as pd
 
 def putRandomData(result):
@@ -36,18 +37,20 @@ for i in range(1, 9) :
     # 주소와 범위를 분리하여 데이터프레임으로 변환
     df[['address', 'range']] = df['차량위치'].str.extract(r"^(.*)\((\d+m 범위)\)$")
 
-    # 연속된 중복 주소 제거 (shift를 활용)
-    df['is_duplicate'] = df['address'].eq(df['address'].shift())
-    df = df[~df['is_duplicate']].drop(columns=['is_duplicate']).reset_index(drop=True)
+    GPS_df = copy.deepcopy(df)
 
-    df.to_csv(f"store/GPS_address{i}.csv", index=False, encoding='utf-8-sig')
+    # 연속된 중복 주소 제거 (shift를 활용)
+    GPS_df['is_duplicate'] = GPS_df['address'].eq(GPS_df['address'].shift())
+    GPS_df = GPS_df[~GPS_df['is_duplicate']].drop(columns=['is_duplicate']).reset_index(drop=True)
+
+    GPS_df.to_csv(f"store/GPS_address{i}.csv", index=False, encoding='utf-8-sig')
 
     # 방문 횟수 집계
     location_counts = df['address'].value_counts().reset_index()
     location_counts.columns = ['address', 'visit_count']
 
     # 방문 횟수를 기준으로 상위 20개 추출
-    top_locations = location_counts.head(20)['address']
+    top_locations = location_counts[location_counts['visit_count'] >= 2].head(20)['address']
 
     # 랜덤 데이터 추가
     result = pd.DataFrame(top_locations, columns=['address'])

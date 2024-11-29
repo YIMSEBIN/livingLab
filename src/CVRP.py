@@ -118,7 +118,7 @@ def print_solution(data, manager, routing, solution, output_file):
     total_distance = 0
     total_load = 0
     
-    with open(output_file, mode='w', newline='', encoding='utf-8') as csvfile:
+    with open(output_file, mode='w', newline='', encoding='utf-8-sig') as csvfile:
         writer = csv.writer(csvfile)
         # CSV 헤더 작성
         writer.writerow(['수거순서', '쓰레기확인시간', '위도', '경도', '폐기물종류', '폐기물개수'])
