@@ -1,9 +1,22 @@
+from datetime import datetime
 import pandas as pd
 import folium
 from folium import plugins
 import branca
 import requests
 from src.secret_key.secrets_manager import get_secret_key
+
+def putEndData(result, type):
+    result.loc[len(result) - 1, '수거순서'] = len(result)
+    result.loc[len(result) - 1, '위치'] = '대전 대덕구 상서동 418-3'
+    result.loc[len(result) - 1, '폐기물종류'] = type
+    result.loc[len(result) - 1, '폐기물개수'] = 0
+    result.loc[len(result) - 1, '쓰레기확인시간'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+    result.loc[len(result) - 1, '이미지'] = '(유)오성알씨.png'
+
+    result['폐기물개수'] = result['폐기물개수'].astype(int)
+    result['쓰레기확인시간'] = pd.to_datetime(result['쓰레기확인시간'], errors = 'coerce')
+    return result
 
 class WasteRouteVisualizer:
     def __init__(self, api_key):
@@ -129,12 +142,19 @@ class WasteRouteVisualizer:
         """
 
 
-    def visualize(self, input_csv, output_html):
+    def visualize(self, input_csv, output_html, type):
         """폐기물 수거 경로 시각화 생성"""
         # 데이터 로드 및 전처리
         df = pd.read_csv(input_csv).iloc[:-2]
+        empty_row = pd.DataFrame({col: '' for col in df.columns}, index=[0])
+        empty_row['위도'] = '36.4216090560865'
+        empty_row['경도'] = '127.423704564947'
+        df = pd.concat([df, empty_row], ignore_index=True)
+        df = putEndData(df, type)
+
         df[['수거순서', '쓰레기확인시간', '위도', '경도']] = df[['수거순서', '쓰레기확인시간', '위도', '경도']].ffill()
         df['쓰레기확인시간'] = pd.to_datetime(df['쓰레기확인시간'])
+        print(df)
         df['수거순서'] = df['수거순서'].astype(int)
         df = df.sort_values(by=['수거순서', '쓰레기확인시간'])
 
@@ -155,7 +175,7 @@ class WasteRouteVisualizer:
         unique_points = df.drop_duplicates('수거순서')
 
         for idx, (order, group) in enumerate(df.groupby('수거순서')):
-            point_type = "시작 지점" if order == 1 else "종료 지점" if order == total_points else "수거 지점"
+            point_type = "시작 지점" if order == 1 else "수거 지점"
             color = (self.colors['start'] if order == 1 
                     else self.colors['end'] if order == total_points 
                     else self.colors['normal'])
@@ -217,11 +237,11 @@ class WasteRouteVisualizer:
         m.save(output_html)
         print(f"지도 생성 완료: {output_html}")
 
-def visualize_routemap() :
+def visualize_routemap(type) :
     API_KEY = get_secret_key()
 
     input_csv_path = f"store/result.csv"
-    output_html_path = f"store/result_waste_route_map.html"
+    output_html_path = f"store/result_map.html"
 
     visualizer = WasteRouteVisualizer(API_KEY)
-    visualizer.visualize(input_csv_path, output_html_path)
+    visualizer.visualize(input_csv_path, output_html_path, type)

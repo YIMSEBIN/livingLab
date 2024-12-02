@@ -94,7 +94,7 @@ class WasteRouteVisualizer:
     def visualize(self, input_csv, output_html):
         """폐기물 수거 경로 시각화 생성"""
         # 데이터 로드 및 전처리
-        df = pd.read_csv(input_csv).iloc[:-2]
+        df = pd.read_csv(input_csv)
         df[['time', 'Latitude', 'Longitude']] = df[['time', 'Latitude', 'Longitude']].ffill()
         df['time'] = pd.to_datetime(df['time'])
 
@@ -133,8 +133,11 @@ class WasteRouteVisualizer:
 def visualize_nodemap() :
     API_KEY = get_secret_key()
 
-    input_csv_path = f"store/route_input.csv"
-    output_html_path = f"store/node_map.html"
+    input_path_large = 'store/route_input_large.csv'
+    input_path_pp = 'store/route_input_pp.csv'
+    output_path_large = 'store/node_map_large.html'
+    output_path_pp = 'store/node_map_pp.html'
 
     visualizer = WasteRouteVisualizer(API_KEY)
-    visualizer.visualize(input_csv_path, output_html_path)
+    visualizer.visualize(input_path_large, output_path_large)
+    visualizer.visualize(input_path_pp, output_path_pp)

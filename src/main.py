@@ -3,21 +3,22 @@ import math
 import time
 from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
-from CVRP import create_data_model, print_solution
-# from src.secret_key.secrets_manager import get_secret_key
+from src.CVRP import create_data_model, print_solution
+from src.secret_key.secrets_manager import get_secret_key
 
 def make_route():
-    API_KEY = '993e67e5f9d2bc70937c00a2eb9964f5'                  # 카카오 REST API 키
+    API_KEY = get_secret_key()                  # 카카오 REST API 키
     TRASH_COST_PATH = 'docs/TrashCost.xlsx'     # 쓰레기 유형에 따른 비용 파일
-    DISTANCE_MATRIX_FILE = f'store/distance_matrix{i}.csv'  # 거리 행렬 파일 이름
-    INPUT_DATA_PATH = f'store/route_input{i}.csv'               # input Data 파일
-    OUTPUT_DATA_PATH = f'store/result{i}.csv'
+    DISTANCE_MATRIX_FILE = f'store/distance_matrix.csv'  # 거리 행렬 파일 이름
+    INPUT_DATA_PATH = f'store/route_input_after_demo.csv'               # input Data 파일
+    OUTPUT_DATA_PATH = f'store/result.csv'
 
     input_data = pd.read_csv(INPUT_DATA_PATH, encoding='UTF8')
+    input_data = input_data.sort_values(by='time')
     # input_data = select_data(INPUT_DATA_PATH, 20)
     trash_cost_data = pd.read_excel(TRASH_COST_PATH)
 
-    # Parameter1. locations : 폐기물 주소 정보(도로명주소, 위도, 경도, type, count, time)
+    # Parameter1. locations : 폐기물 주소 정보(Latitude,Longitude,type,count,time,image,score,address)
     locations = input_data.to_dict("records")
 
     # Parameter2. demands : 각 폐기물의 용량
@@ -91,10 +92,10 @@ def make_route():
     else:
         print('솔루션 없음')
 
-for i in range(1, 9) :
+# for i in range(1, 9) :
     
-    start = time.time()
-    make_route()
-    end = time.time()
+#     start = time.time()
+#     make_route()
+#     end = time.time()
 
-    print(f"{i}번째 폐기물리스트 최적경로 도출 시간 : {end - start:.5f} sec")
+#     print(f"{i}번째 폐기물리스트 최적경로 도출 시간 : {end - start:.5f} sec")

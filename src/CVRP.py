@@ -121,7 +121,7 @@ def print_solution(data, manager, routing, solution, output_file):
     with open(output_file, mode='w', newline='', encoding='utf-8-sig') as csvfile:
         writer = csv.writer(csvfile)
         # CSV 헤더 작성
-        writer.writerow(['수거순서', '쓰레기확인시간', '위도', '경도', '폐기물종류', '폐기물개수'])
+        writer.writerow(['수거순서', '이미지', '위치', '폐기물종류', '쓰레기확인시간', '위도', '경도', '폐기물개수'])
 
         # 각 차량에 대해 경로 출력 및 저장
         for vehicle_id in range(data["num_vehicles"]):
@@ -138,6 +138,8 @@ def print_solution(data, manager, routing, solution, output_file):
                 
                 # 위치 데이터 추출
                 location = data["location"][node_index]
+                image = location["image"]
+                address = location["address"]
                 time = location["time"]
                 latitude = location["Latitude"]
                 longitude = location["Longitude"]
@@ -145,7 +147,7 @@ def print_solution(data, manager, routing, solution, output_file):
                 waste_count = location["count"]
 
                 # CSV 파일에 기록
-                writer.writerow([order, time, latitude, longitude, waste_type, waste_count])
+                writer.writerow([order, image, address, waste_type, time, latitude, longitude, waste_count])
 
                 plan_output += f" {node_index} Load({route_load}) -> {location}\n"
                 previous_index = index

@@ -11,6 +11,7 @@ from streamlit import components
 from ultralytics import YOLO
 import cv2
 
+from src.address_changer.addrChanger import image_to_route_changer
 from src.main import make_route
 from src.visualize.visualize_nodes import visualize_nodemap
 from src.visualize.visualize_routes import visualize_routemap
@@ -179,9 +180,11 @@ def show_map(html_file):
         st.error("지도 파일을 찾을 수 없습니다.")
 
 def analyze_images():
-    base_dir = 'E:/livingLab/livingLab-main/demo'
-    model_path = os.path.join(base_dir, 'model/best.pt')  # 모델 경로 수정
-    output_dir = os.path.join(base_dir, 'results')
+    # base_dir = 'E:/livingLab/livingLab-main/demo'
+    # model_path = os.path.join(base_dir, 'model/best.pt')  # 모델 경로 수정
+    model_path = 'model/best.pt'
+    # output_dir = os.path.join(base_dir, 'results')
+    output_dir = 'results'
     os.makedirs(output_dir, exist_ok=True)
     
     # 모델 파일 존재 여부 확인
@@ -250,10 +253,11 @@ def analyze_images():
             })
         
         # 결과 이미지 저장
-        detected_name = f"{os.path.splitext(img_name)[0]}_detected{os.path.splitext(img_name)[1]}"
+        # detected_name = f"{os.path.splitext(img_name)[0]}_detected{os.path.splitext(img_name)[1]}"
+        detected_name = f"{os.path.splitext(img_name)[0]}{os.path.splitext(img_name)[1]}"
         output_path = os.path.join(output_dir, detected_name)
         cv2.imwrite(output_path, img)
-        st.write(f"이미지 저장 완료: {output_path}")
+        print(f"이미지 저장 완료: {output_path}")
     
     # DataFrame 생성
     if results:
@@ -264,85 +268,130 @@ def analyze_images():
         df_no_large = df[~df['Type'].str.contains('Large Waste Items', na=False)]
         no_large_path = os.path.join(output_dir, 'detection_results_no_large_waste.csv')
         df_no_large.to_csv(no_large_path, index=False, encoding='utf-8-sig')
-        st.write(f"Large Waste Items 제외 CSV 저장 완료: {no_large_path}")
+        print(f"Large Waste Items 제외 CSV 저장 완료: {no_large_path}")
         
         # PP bag이 없는 데이터
         df_no_pp = df[~df['Type'].str.contains('PP bag', na=False)]
         no_pp_path = os.path.join(output_dir, 'detection_results_no_pp_bag.csv')
         df_no_pp.to_csv(no_pp_path, index=False, encoding='utf-8-sig')
-        st.write(f"PP bag 제외 CSV 저장 완료: {no_pp_path}")
+        print(f"PP bag 제외 CSV 저장 완료: {no_pp_path}")
         
         return df
     else:
         st.warning("검출된 결과가 없습니다.")
         return None
 
-def make_node_map() :
-    visualize_nodemap()
+
+def initalize_state() : 
+    if 'page' not in st.session_state:
+        st.session_state['page'] = 1
+    if 'images' not in st.session_state:
+        st.session_state['images'] = []
+    if 'route_input_path' not in st.session_state:
+        st.session_state['route_input_path'] = 'store/route_input.csv'
+    if 'type_choice' not in st.session_state:
+        st.session_state['type_choice'] = None
+    if 'show_nodemap' not in st.session_state :
+        st.session_state['show_nodemap'] = False
+    if 'nodemap_path' not in st.session_state :
+        st.session_state['nodemap_path'] = 'store/empty_map.html'
 
 def make_route_map() :
     make_route()
-    # time.sleep(100)
-    visualize_routemap()
+    type = "Large Waste Items" if st.session_state['type_choice']=='대형폐기물' else "PP bag"
+    visualize_routemap(type)
 
-def initalize_state() : 
-    if 'images' not in st.session_state:
-        st.session_state['images'] = []
-    if 'show_map' not in st.session_state :
-        st.session_state['show_map'] = False
-    if 'page' not in st.session_state:
-        st.session_state['page'] = 1  # 첫 번째 페이지로 초기화
-    if 'selection_status' not in st.session_state:
-        # 선택 상태를 저장하는 리스트 초기화
-        data = pd.read_csv('store/route_input.csv')
-        st.session_state['selection_status'] = [True] * len(data)
-    if 'analysis_results' not in st.session_state:
-        st.session_state['analysis_results'] = None
+def initalize_checkbox_state() :
+    if 'pp_selection_status' not in st.session_state:
+        data = pd.read_csv('store/route_input_pp.csv')
+        st.session_state['pp_selection_status'] = [True] * len(data)
+    if 'large_selection_status' not in st.session_state:
+        data = pd.read_csv('store/route_input_large.csv')
+        st.session_state['large_selection_status'] = [True] * len(data)
+
+# 폐기물 종류 state에 따라 최적경로 input path를 변경하는 유틸함수.
+def change_type_state(type_choice) :
+    st.session_state['type_choice'] = type_choice
+    
+    if type_choice == '대형폐기물':
+        st.session_state['route_input_path'] = 'store/route_input_large.csv'
+        st.session_state['nodemap_path'] = 'store/node_map_large.html'
+    elif type_choice == 'pp마대':
+        st.session_state['route_input_path'] = 'store/route_input_pp.csv'
+        st.session_state['nodemap_path'] = 'store/node_map_pp.html'
+    else:
+        st.session_state['route_input_path'] = 'store/route_input.csv'
+        st.session_state['nodemap_path'] = 'store/empty_map.html'
+    st.rerun()
 
 
 def main():
     st.set_page_config(page_title="리빙랩 데모", layout="wide")
     st.title("😎 페기물 수거 최적경로 탐색")
     initalize_state()
-    
-    if st.session_state['page'] == 1:
-        col1, col2 = st.columns([1, 1])
-        with col2:
-            # 컬럼을 더 세분화하여 빈 공간을 만들고 버튼을 오른쪽으로 이동
-            cols = st.columns([3, 1, 1])  # 5개의 컬럼 생성
 
-            with cols[1]:  # 4번째 컬럼에 첫 번째 버튼 배치
+    ##############
+    ### PAGE 1 ###
+    ##############
+    if st.session_state['page'] == 1:
+
+        ## 오른쪽 버튼 Layout ##
+        col1, col2 = st.columns([1, 1])
+
+        with col2:
+            cols = st.columns([3, 1, 1, 1])
+
+            with cols[1]:
                 if st.button("이미지 분석하기"):
-                    st.session_state['analysis_results'] = analyze_images()
-                    make_node_map()
+                    analyze_images()
+                    image_to_route_changer()
+                    visualize_nodemap()
                     time.sleep(1)
-                    st.session_state['show_map'] = True
+                    initalize_checkbox_state()
+                    st.session_state['show_nodemap'] = True
                     st.rerun()
 
-            with cols[2]:  # 5번째 컬럼에 두 번째 버튼 배치
+            with cols[2]:
                 if st.button("경로 도출하기"):
-                    df = pd.read_csv('store/route_input.csv')
-                    selected_df = df[st.session_state['selection_status']]
+                    route_input_path = st.session_state['route_input_path']
+                    type_choice = st.session_state['type_choice']
+                    route_input_df = pd.read_csv(route_input_path)
+                    if type_choice == '대형폐기물':
+                        selected_df = route_input_df[st.session_state['large_selection_status']]
+                    elif type_choice == 'pp마대':
+                        selected_df = route_input_df[st.session_state['pp_selection_status']]
+                        
                     selected_df.to_csv('store/route_input_after_demo.csv', index=False)
                     make_route_map()
                     st.session_state['page'] = 2
                     st.rerun()
 
+            with cols[3]: 
+                type = ['대형폐기물', 'pp마대']
+                current_choice = st.selectbox('폐기물 종류', type, label_visibility="collapsed")
+                previous_choice = st.session_state['type_choice']
+
+                if current_choice != previous_choice:
+                    change_type_state(current_choice)
+
+
+        ## 지도 / 리스트 Layout ##
         col1, col2 = st.columns([1, 1])
 
         with col1:
             
-            if st.session_state['show_map']:
-                map_html_file = "store/node_map.html"
-                show_map(map_html_file)
-            else :
-                map_html_file = "store/empty_map.html"
-                show_map(map_html_file)
+            ## 지도 Section
+            map_html_file = 'store/empty_map.html'
+            if st.session_state['show_nodemap']:
+                map_html_file = st.session_state['nodemap_path']
+            show_map(map_html_file)
+
+            ## 이미지 업로드 Section
             uploaded_files = st.file_uploader(label="Choose an image file", type=['png', 'jpg', 'jpeg'], accept_multiple_files=True)
             if uploaded_files:
                 save_image(uploaded_files)
 
-            # 이미지 표시
+            ## 이미지 미리보기 Section
             if st.session_state["images"]:
                 st.write("업로드된 이미지:")
                 displayed_images = st.session_state["images"]
@@ -352,15 +401,13 @@ def main():
                         st.image(f'data/{image_name}', width=200)
             
         with col2:
-                    
             st.markdown("### ✅ 폐기물 리스트")
             st.markdown('<hr style="margin-top: 0rem; margin-bottom: 0rem;"/>', unsafe_allow_html=True)
 
-            # CSV 파일 읽기
-            if st.session_state['show_map']:
+            if st.session_state['show_nodemap']:
+                trash_data = pd.read_csv(st.session_state['route_input_path'])
 
-                data = pd.read_csv('store/route_input.csv')
-            
+                ## 폐기물 리스트 헤더 Section
                 cols = st.columns([1, 30, 1, 25, 1, 15, 1, 15, 1])
                 with cols[1]:
                     st.markdown('<p style="margin: 0;"><strong>이미지</strong></p>', unsafe_allow_html=True)
@@ -372,64 +419,65 @@ def main():
                     st.markdown('<p style="margin: 0;"><strong>수거여부</strong></p>', unsafe_allow_html=True)
                 st.markdown('<hr style="margin-top: 0rem;"/>', unsafe_allow_html=True)
 
-                for i, row in data.iterrows():
-                    if i == 0 or i == len(data)-1 :
+                ## 폐기물 리스트 바디 Section
+                for i, row in trash_data.iterrows():
+                    # 1번, 끝번 데이터는 (유)오성알씨.
+                    if i == 0 :
                         continue
+                    
+                    # 리스트 (이미지, 주소, 폐기물 종류, 수거여부)
                     cols = st.columns([1, 30, 1, 25, 1, 15, 1, 15, 1])
                     with cols[1]:
-                        st.image(f'data/{row['image']}', width=1000)  # 이미지 URL 혹은 경로
+                        st.image(f'results/{row["image"]}', width=1000)
                     with cols[3]:
-                        st.write(f'{row['address']}')
+                        st.write(f'{row["address"]}')
                     with cols[5]:
-                        # 폐기물 종류를 세로 중앙에 정렬
-                        st.markdown(f'<div style="display: flex; align-items: center; height: 100%;">{row['type']}</div>', unsafe_allow_html=True)
-                
+                        st.markdown(f'<div style="display: flex; align-items: center; height: 100%;">{row["type"]}</div>', unsafe_allow_html=True)
                     with cols[7]:
-                        # 체크박스로 폐기물 선택 가능하게 설정
                         checkbox_label = f"Select {row['type']} at {row['address']}"
-                        is_selected = st.checkbox(checkbox_label, key=i, value=st.session_state['selection_status'][i], label_visibility="collapsed")
-                        # 선택 상태 업데이트
-                        st.session_state['selection_status'][i] = is_selected
+                        if st.session_state['type_choice'] == '대형폐기물' :
+                            checkbox_value =  st.session_state['large_selection_status']
+                        elif st.session_state['type_choice'] == 'pp마대' :
+                            checkbox_value =  st.session_state['pp_selection_status']
+                        is_selected = st.checkbox(checkbox_label, key=i, value=checkbox_value[i], label_visibility="collapsed")
+                        if is_selected != checkbox_value[i] :
+                            checkbox_value[i] = is_selected
 
-                    # 각 데이터 아래에 선 그리기
+                    # 각 데이터 아래 선
                     st.markdown('<hr style="margin-top: 0.5rem;"/>', unsafe_allow_html=True)
 
+            else : 
+                st.write("이미지를 먼저 분석해주세요.")
+
+
+    ##############
+    ### PAGE 2 ###
+    ##############
     elif st.session_state['page'] == 2:
         if st.button("이전 페이지로 돌아가기"):
             st.session_state['page'] = 1
             st.rerun()
 
         col1, col2 = st.columns([2, 1])
+
         data = pd.read_csv('store/result.csv')
         df = data[:-2]
+
         with col1:
-            map_html_file = 'store/result_waste_route_map.html'
+            map_html_file = 'store/result_map.html'
             show_map(map_html_file)
 
         with col2:
             st.markdown("## 폐기물 수거 경로")
 
             # 테이블 데이터 준비
-            table_data = df[['수거순서','쓰레기확인시간', '위도', '경도', '폐기물종류', '폐기물개수']].copy()
-            
-            table_data['위치'] = table_data.apply(lambda row: f"{row['위도']:.4f}, {row['경도']:.4f}", axis=1)# <------------------------------------------------- 여기서 위도 경도 수정 하시면 됩니다.
-
-            table_data = table_data.drop(['위도', '경도'], axis=1) 
+            table_data = df[['수거순서', '이미지', '위치', '폐기물종류', '쓰레기확인시간']].copy()
 
             table_data['쓰레기확인시간'] = pd.to_datetime(table_data['쓰레기확인시간']).dt.strftime('%Y-%m-%d %H:%M:%S')
-            table_data = table_data[['수거순서','쓰레기확인시간', '위치', '폐기물종류', '폐기물개수']]
-
-            # 폐기물 개수를 정수로 변환
-            table_data['폐기물개수'] = table_data['폐기물개수'].astype(int)
+            table_data = table_data[['수거순서', '이미지', '위치', '폐기물종류', '쓰레기확인시간']]
 
             # 테이블 표시 (인덱스 숨김)
-            st.dataframe(table_data, hide_index=True, column_config={
-                "폐기물개수": st.column_config.NumberColumn(
-                    "폐기물개수",
-                    help="수거할 폐기물의 개수",
-                    format="%d"
-                )
-            })
+            st.dataframe(table_data, hide_index=True)
 
 
 if __name__ == "__main__":
